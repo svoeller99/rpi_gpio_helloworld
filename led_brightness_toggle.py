@@ -24,6 +24,7 @@ DUTY_CYCLE_INCREMENT = (MAX_DUTY_CYCLE - MIN_DUTY_CYCLE) / INCREMENT_COUNT
 current_duty_cycle = MIN_DUTY_CYCLE
 
 # Represents a pressable button with a function pointer to execute on press.
+# NOTE: GPIO.add_event_detect looks like a better alternative to this and reading state in a loop, but we'll get to that later
 class Button:
     def __init__(self, pin, on_press):
         self.pin = pin
@@ -42,6 +43,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(DOWN_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(UP_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LED_PIN, GPIO.OUT)
+GPIO.add_event_detect()
 pwm = GPIO.PWM(LED_PIN, FREQUENCY_HZ)
 pwm.start(current_duty_cycle)
 
