@@ -39,8 +39,8 @@ class Button:
 
 # initialize GPIO
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(DOWN_BUTTON_PIN, GPIO.IN)
-GPIO.setup(UP_BUTTON_PIN, GPIO.IN)
+GPIO.setup(DOWN_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(UP_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LED_PIN, GPIO.OUT)
 pwm = GPIO.PWM(LED_PIN, FREQUENCY_HZ)
 pwm.start(current_duty_cycle)
