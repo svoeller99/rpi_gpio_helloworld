@@ -17,3 +17,11 @@ The circuit:
 
 The circuit:
 ![RGB LED Toggle](rgb_led_toggle.jpeg)
+
+## RGB LED Variable Brightness
+
+3-button RGB LED toggle, but where each color of the RGB LED increments exponentially, rather than simply turning on/off.
+
+[The code](rgb_led_variable_toggle.py)
+
+The circuit in this case is identical to [RGB LED Toggle](#rgb-led-toggle).
