@@ -2,6 +2,7 @@
 
 import RPi.GPIO as GPIO
 from time import sleep
+from math import log10, pow
 
 # GPIO pin numbers
 # pinout reference: https://toptechboy.com/understanding-raspberry-pi-4-gpio-pinouts/
@@ -15,13 +16,15 @@ BUTTON_UP = 0
 
 # Constants for PWM
 FREQUENCY_HZ = 100
-MIN_DUTY_CYCLE = 1
-MAX_DUTY_CYCLE = 99
+MAX_DUTY_CYCLE = 100
 INCREMENT_COUNT = 8
-DUTY_CYCLE_INCREMENT = (MAX_DUTY_CYCLE - MIN_DUTY_CYCLE) / INCREMENT_COUNT
+# base for exponential calculation of duty cycle based on the desired number of increments
+# supports a smoother / more linear visual brightness transition
+INCREMENT_BASE = pow(10, log10(MAX_DUTY_CYCLE) / (INCREMENT_COUNT - 1))
 
 # Mutable state
-current_duty_cycle = MIN_DUTY_CYCLE
+# number of LED brightness increments - power to apply to INCREMENT_BASE to get duty cycle
+current_increment_count = 0
 
 # Represents a pressable button with a function pointer to execute on press.
 # NOTE: GPIO.add_event_detect looks like a better alternative to this and reading state in a loop, but we'll get to that later
@@ -45,7 +48,6 @@ GPIO.setup(UP_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LED_PIN, GPIO.OUT)
 
 pwm = GPIO.PWM(LED_PIN, FREQUENCY_HZ)
-pwm.start(current_duty_cycle)
 
 def dim_led():
     change_led(False)
@@ -54,16 +56,28 @@ def brighten_led():
     change_led(True)
 
 def change_led(brighten):
-    global current_duty_cycle
+    global current_increment_count
     if brighten:
-        if current_duty_cycle < MAX_DUTY_CYCLE:
+        if current_increment_count < INCREMENT_COUNT - 1:
+            current_increment_count += 1
             print('brightening LED')
-            current_duty_cycle += DUTY_CYCLE_INCREMENT
     else:
-        if current_duty_cycle > MIN_DUTY_CYCLE:
+        if current_increment_count > 0:
+            current_increment_count -= 1
             print('dimming LED')
-            current_duty_cycle -= DUTY_CYCLE_INCREMENT
+    current_duty_cycle = calculate_duty_cycle()
     pwm.ChangeDutyCycle(current_duty_cycle)
+
+def calculate_duty_cycle():
+    global current_increment_count, INCREMENT_BASE
+    if current_increment_count == 0:
+        return 0
+    duty_cycle = pow(INCREMENT_BASE, current_increment_count)
+    if duty_cycle > MAX_DUTY_CYCLE:
+        duty_cycle = MAX_DUTY_CYCLE
+    return duty_cycle
+
+pwm.start(calculate_duty_cycle())
 
 # create our buttons
 dim_button = Button(DOWN_BUTTON_PIN, dim_led)
@@ -73,7 +87,7 @@ buttons = [dim_button, brighten_button]
 # Until keyboard interrupt occurs, read button states, allowing Button to trigger dim/brighten functions
 try:
     while True:
-        print(current_duty_cycle)
+        print(current_increment_count, calculate_duty_cycle())
         for button in buttons: 
             button.read_state()
         sleep(.1)
