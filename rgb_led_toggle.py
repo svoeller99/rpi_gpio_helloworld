@@ -29,8 +29,6 @@ class Button:
         self.pin = pin
         self.on_press = on_press
         self.last_read_state = BUTTON_UP
-
-    def gpio_init(self):
         GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         
     def read_state(self):
@@ -41,7 +39,8 @@ class Button:
             self.on_press()
 
 class LED:
-    def __init__(self, pin):
+    def __init__(self, name, pin):
+        self.name = name
         self.pin = pin
         self.current_state = False
         GPIO.setup(pin, GPIO.OUT)
@@ -54,6 +53,7 @@ class LED:
             self.pwm.ChangeDutyCycle(100)
         else:
             self.pwm.ChangeDutyCycle(0)
+        print(f'Toggled LED "{self.name}" to {self.current_state}')    
 
     def __del__(self):
         self.pwm.stop()
@@ -62,9 +62,9 @@ class LED:
 GPIO.setmode(GPIO.BOARD)
 
 # init RGB LED objects
-red_led = LED(RED_LED_CHANNEL)
-green_led = LED(GREEN_LED_CHANNEL)
-blue_led = LED(BLUE_LED_CHANNEL)
+red_led = LED('red', RED_LED_CHANNEL)
+green_led = LED('green', GREEN_LED_CHANNEL)
+blue_led = LED('blue', BLUE_LED_CHANNEL)
 leds = [red_led, green_led, blue_led]
 
 # init RGB buttons
@@ -75,7 +75,6 @@ buttons = [red_button, green_button, blue_button]
 
 try:
     while True:
-        print('hi')
         for button in buttons: button.read_state()
         sleep(.1)
 except KeyboardInterrupt:
