@@ -43,7 +43,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(DOWN_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(UP_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LED_PIN, GPIO.OUT)
-GPIO.add_event_detect()
+
 pwm = GPIO.PWM(LED_PIN, FREQUENCY_HZ)
 pwm.start(current_duty_cycle)
 
@@ -54,6 +54,7 @@ def brighten_led():
     change_led(True)
 
 def change_led(brighten):
+    global current_duty_cycle
     if brighten:
         if current_duty_cycle < MAX_DUTY_CYCLE:
             print('brightening LED')
