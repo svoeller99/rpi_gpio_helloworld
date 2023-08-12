@@ -10,6 +10,7 @@ DOWN_BUTTON_PIN = 33 # BCM 13
 UP_BUTTON_PIN = 35 # BCM 19
 LED_PIN = 37 # BCM 26
 
+# TODO: factor out for reuse
 # Constants for button state
 BUTTON_DOWN = 1
 BUTTON_UP = 0
@@ -26,6 +27,7 @@ INCREMENT_BASE = pow(10, log10(MAX_DUTY_CYCLE) / (INCREMENT_COUNT - 1))
 # number of LED brightness increments - power to apply to INCREMENT_BASE to get duty cycle
 current_increment_count = 0
 
+# TODO: factor out for reuse
 # Represents a pressable button with a function pointer to execute on press.
 # NOTE: GPIO.add_event_detect looks like a better alternative to this and reading state in a loop, but we'll get to that later
 class Button:
