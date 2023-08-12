@@ -4,6 +4,8 @@ import RPi.GPIO as GPIO
 from time import sleep
 from math import log10, pow
 
+from button import Button
+
 # GPIO pin numbers
 # pinout reference: https://toptechboy.com/understanding-raspberry-pi-4-gpio-pinouts/
 DOWN_BUTTON_PIN = 33 # BCM 13
@@ -27,26 +29,8 @@ INCREMENT_BASE = pow(10, log10(MAX_DUTY_CYCLE) / (INCREMENT_COUNT - 1))
 # number of LED brightness increments - power to apply to INCREMENT_BASE to get duty cycle
 current_increment_count = 0
 
-# TODO: factor out for reuse
-# Represents a pressable button with a function pointer to execute on press.
-# NOTE: GPIO.add_event_detect looks like a better alternative to this and reading state in a loop, but we'll get to that later
-class Button:
-    def __init__(self, pin, on_press):
-        self.pin = pin
-        self.on_press = on_press
-        self.last_read_state = BUTTON_UP
-        
-    def read_state(self):
-        prior_state = self.last_read_state
-        new_state = GPIO.input(self.pin)
-        self.last_read_state = new_state
-        if new_state == BUTTON_DOWN and prior_state == BUTTON_UP:
-            self.on_press()
-
 # initialize GPIO
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(DOWN_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(UP_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LED_PIN, GPIO.OUT)
 
 pwm = GPIO.PWM(LED_PIN, FREQUENCY_HZ)
