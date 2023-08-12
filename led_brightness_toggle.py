@@ -81,4 +81,5 @@ try:
 except KeyboardInterrupt:
     print('bye')
 
+pwm.stop()
 GPIO.cleanup()
