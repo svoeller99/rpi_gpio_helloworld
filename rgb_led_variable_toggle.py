@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 from button import Button
 from math import log10, pow
 from time import sleep
+from vpython import *
 
 # GPIO channels
 # inputs
@@ -67,9 +68,25 @@ green_button = Button(GREEN_BUTTON_CHANNEL, green_led.toggle)
 blue_button = Button(BLUE_BUTTON_CHANNEL, blue_led.toggle)
 buttons = [red_button, green_button, blue_button]
 
+# init vpython objects
+mySphere = sphere(color=color.white, radius=1, pos=vector(0, 2.5, 0))
+myCylinder = cylinder(color=color.white, radius=1, length=2.5, axis=vector(0,1,0))
+myBase = cylinder(color=color.white, radius=1.2, length=.25, axis=vector(0,1,0))
+myLeg1 = box(pos=vector(-.75,-1,0), size=vector(.1,6,.1), color=vector(.2, .2, .2))
+myLeg2 = box(pos=vector(-..5,-1,0), size=vector(.1,6,.1), color=vector(.2, .2, .2))
+myLeg3 = box(pos=vector(-.25,-1,0), size=vector(.1,6,.1), color=vector(.2, .2, .2))
+colored_vpython_objects = [mySphere, myCylinder, myBase]
+
 try:
     while True:
         for button in buttons: button.read_state()
+        for vpython_object in colored_vpython_objects:
+            vpython_color_increment = 100 / INCREMENT_COUNT
+            vpython_object.color = vector(
+                red_led.current_increment_count * vpython_color_increment,
+                green_led.current_increment_count * vpython_color_increment,
+                blue_led.current_increment_count * vpython_color_increment
+            )
         sleep(.1)
 except KeyboardInterrupt:
     print('bye')
