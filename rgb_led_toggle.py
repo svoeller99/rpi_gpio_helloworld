@@ -3,6 +3,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 from button import Button
+from led import LED
 
 # GPIO channels
 # inputs
@@ -13,29 +14,6 @@ BLUE_BUTTON_CHANNEL = 37  # BCM 26
 RED_LED_CHANNEL = 36      # BCM 16
 GREEN_LED_CHANNEL = 38    # BCM 20
 BLUE_LED_CHANNEL = 40     # BCM 12
-
-# Constants for PWM
-FREQUENCY_HZ = 100
-
-class LED:
-    def __init__(self, name, pin):
-        self.name = name
-        self.pin = pin
-        self.current_state = False
-        GPIO.setup(pin, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pin, FREQUENCY_HZ)
-        self.pwm.start(0)
-    
-    def toggle(self):
-        self.current_state = not self.current_state
-        if self.current_state:
-            self.pwm.ChangeDutyCycle(100)
-        else:
-            self.pwm.ChangeDutyCycle(0)
-        print(f'Toggled LED "{self.name}" to {self.current_state}')    
-
-    def __del__(self):
-        self.pwm.stop()
 
 # init GPIO
 GPIO.setmode(GPIO.BOARD)
