@@ -16,7 +16,6 @@ RED_LED_OUT_PIN = 13
 GREEN_LED_OUT_PIN = 19
 BLUE_LED_OUT_PIN = 26
 
-FREQUENCY_HZ = 100
 MAX_DUTY_CYCLE = 100
 INCREMENT_COUNT = 255
 # base for exponential calculation of duty cycle based on the desired number of increments
