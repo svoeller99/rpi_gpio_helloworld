@@ -25,3 +25,12 @@ The circuit:
 [The code](rgb_led_variable_toggle.py)
 
 The circuit in this case is identical to [RGB LED Toggle](#rgb-led-toggle).
+
+## Analog Input
+
+Analog input with ADC0834 analog-to-digital converter, used to control the brightness of an LED.
+
+[The code](analog_input.py)
+
+The circuit:
+![Analog Input](analog_input.jpeg)
