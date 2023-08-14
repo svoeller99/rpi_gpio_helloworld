@@ -12,9 +12,9 @@ GREEN_ADC_CHANNEL = 1
 BLUE_ADC_CHANNEL = 2
 
 # BCM channel numbers for each RGB LED component
-RED_LED_OUT_PIN = 13
+RED_LED_OUT_PIN = 26
 GREEN_LED_OUT_PIN = 19
-BLUE_LED_OUT_PIN = 26
+BLUE_LED_OUT_PIN = 13
 
 MAX_DUTY_CYCLE = 100
 INCREMENT_COUNT = 255
@@ -35,9 +35,11 @@ class ADCControlledLED:
         reading ^= 255
         duty_cycle = self.calculate_duty_cycle(reading)
         print(self.name, reading, duty_cycle)
-        led.set_duty_cycle(duty_cycle)
+        self.led.set_duty_cycle(duty_cycle)
 
     def calculate_duty_cycle(self, reading):
+        if reading == 0:
+            return 0
         duty_cycle = pow(INCREMENT_BASE, reading)
         if duty_cycle > MAX_DUTY_CYCLE:
             duty_cycle = MAX_DUTY_CYCLE
@@ -45,9 +47,9 @@ class ADCControlledLED:
 
 try:
     GPIO.setmode(GPIO.BCM)
-    red_led = LED(RED_LED_OUT_PIN)
-    green_led = LED(GREEN_LED_OUT_PIN)
-    blue_led = LED(BLUE_LED_OUT_PIN)
+    red_led = LED('Red', RED_LED_OUT_PIN)
+    green_led = LED('Green', GREEN_LED_OUT_PIN)
+    blue_led = LED('Blue', BLUE_LED_OUT_PIN)
     leds = [red_led, green_led, blue_led]
 
     ADC0834.setup()
