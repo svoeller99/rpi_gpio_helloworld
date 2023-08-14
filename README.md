@@ -33,7 +33,7 @@ Analog input with ADC0834 analog-to-digital converter, used to control the brigh
 [The code](analog_input.py)
 
 The circuit:
-![Analog Input](analog_input.jpeg)
+![Analog Input - Single LED](analog_input.jpeg)
 
 ## Analog Input - RGB LED
 
@@ -42,4 +42,4 @@ Analog input with ADC0834 analog-to-digital converter, used to control the brigh
 [The code](analog_input_rgb_led.py)
 
 The circuit:
-**TODO**
+![Analog Input - RGB LED](analog_input_rgb_led.jpeg)
