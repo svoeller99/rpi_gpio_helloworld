@@ -16,7 +16,7 @@ The circuit:
 [The code](rgb_led_toggle.py)
 
 The circuit:
-[RGB LED Toggle](rgb_led_toggle.jpeg)
+![RGB LED Toggle](rgb_led_toggle.jpeg)
 
 ## RGB LED Variable Brightness
 
@@ -33,5 +33,4 @@ Analog input with ADC0834 analog-to-digital converter, used to control the brigh
 [The code](analog_input.py)
 
 The circuit:
-
-**TODO**
+![Analog Input](analog_input.jpeg)
