@@ -17,7 +17,7 @@ PERIOD_MICROS = PERIOD_MILLIS * 1000
 # a smaller range (1ms-2ms, or 1000us - 2000us).
 # See also http://www.ee.ic.ac.uk/pcheung/teaching/DE1_EE/stores/sg90_datasheet.pdf.
 SERVO_MIN_PULSE_MICROS = 500  # 0 degrees
-SERVO_MAX_PULSE_MICROS = 2500 # 180 degrees
+SERVO_MAX_PULSE_MICROS = 2400 # 180 degrees - originally 2500 on sunfounder's website
 
 # This servo rotates from 0 to 180 degrees.
 ANGLE_MIN_DEGREES = 0
