@@ -44,7 +44,7 @@ Analog input with ADC0834 analog-to-digital converter, used to control the brigh
 The circuit:
 ![Analog Input - RGB LED](analog_input_rgb_led.jpeg)
 
-## Servo Control via PWM
+## Servo Control From User Input via PWM
 
 Control a servo using PWM given a user-supplied percentage.
 
@@ -52,3 +52,12 @@ Control a servo using PWM given a user-supplied percentage.
 
 The circuit:
 ![Servo Control via PWM](pwm_servo.jpeg)
+
+## Servo Control Using Potentiometer via PWM
+
+Control a servo using PWM given a potentiometer reading.
+
+[The code](pwm_servo_potentiometer.py)
+
+The circuit:
+**TODO**
