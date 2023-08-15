@@ -4,7 +4,7 @@ import ADC0834
 import RPi.GPIO as GPIO
 from time import sleep
 
-SERVO_PIN = 18
+SERVO_PIN = 22
 
 ADC_CHANNEL = 0
 
