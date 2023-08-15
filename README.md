@@ -60,4 +60,4 @@ Control a servo using PWM given a potentiometer reading.
 [The code](pwm_servo_potentiometer.py)
 
 The circuit:
-**TODO**
+![Servo Control Using Potentiometer](pwm_servo_potentiometer.jpeg)
