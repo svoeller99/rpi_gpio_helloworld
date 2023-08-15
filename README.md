@@ -51,4 +51,4 @@ Control a servo using PWM given a user-supplied percentage.
 [The code](pwm_servo.py)
 
 The circuit:
-**TODO**
+![Servo Control via PWM](pwm_servo.jpeg)
