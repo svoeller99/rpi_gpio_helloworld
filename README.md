@@ -61,3 +61,12 @@ Control a servo using PWM given a potentiometer reading.
 
 The circuit:
 ![Servo Control Using Potentiometer](pwm_servo_potentiometer.jpeg)
+
+## Ultrasonic Sensor
+
+Use an ultrasonic sensor to measure the distance of an object in inches.
+
+[The code](ultrasonic_sensor.py)
+
+The circuit:
+![Ultrasonic sensor](ultrasonic_sensor.jpeg)
