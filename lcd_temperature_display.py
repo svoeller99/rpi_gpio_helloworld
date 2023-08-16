@@ -3,8 +3,7 @@
 import RPi.GPIO as GPIO
 import LCD1602
 import dht11
-import smbus2
-import time
+import smbus2 # NOTE: not referenced, here, but used by LCD1602, internally
 from button import Button
 
 def celcius_to_fahrenheit(celcius):
