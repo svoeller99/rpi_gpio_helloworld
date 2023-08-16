@@ -11,7 +11,7 @@ GPIO.setup(TRIGGER_PIN, GPIO.OUT)
 GPIO.setup(ECHO_PIN, GPIO.IN)
 
 SPEED_OF_SOUND_FEET_PER_SECOND = 1125
-SPEED_OF_SOUND_INCHES_PER_MICROSECOND = SPEED_OF_SOUND_FEET_PER_SECOND * 12 / 1E6
+SPEED_OF_SOUND_INCHES_PER_MICROSECOND = SPEED_OF_SOUND_FEET_PER_SECOND * 12 / 1E6 # 0.0135
 
 def calculate_distance_in_inches(ping_travel_time_microseconds):
     ping_travel_distance_inches = SPEED_OF_SOUND_INCHES_PER_MICROSECOND * ping_travel_time_microseconds
@@ -30,12 +30,12 @@ try:
         while GPIO.input(ECHO_PIN) == 1:
             pass
         echo_end_time = time.time()
-        ping_travel_time = echo_end_time - echo_start_time
-        distance_in_inches = calculate_distance_in_inches(ping_travel_time)
-        print(f"Ping travel time (us): {int(ping_travel_time * 1E6)}.")
+        ping_travel_time_microseconds = (echo_end_time - echo_start_time) * 1E6
+        distance_in_inches = calculate_distance_in_inches(ping_travel_time_microseconds)
+        print(f"Ping travel time (us): {int(ping_travel_time_microseconds)}.")
         print(f"Object distance (in): {distance_in_inches}.")
         print()
-        time.sleep(.1)
+        time.sleep(.5)
 except KeyboardInterrupt:
     print('bye')
 
