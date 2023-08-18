@@ -27,14 +27,25 @@ BUTTON_PIN = 6
 LCD_ADDRESS = 0x3f # TODO: verify this via `i2cdetect -y 1`
 ADC_CHANNEL = 0
 
+# constants for program/monitor modes
+PROGRAM_MODE = 'program'
+MONITOR_MODE = 'monitor'
+
+# state
+current_mode = PROGRAM_MODE
+
 def handle_button_press():
-    print('button pressed')
+    global current_mode
+    if current_mode == PROGRAM_MODE:
+        current_mode = MONITOR_MODE
+    else:
+        current_mode = PROGRAM_MODE
+    print('button pressed - current mode: ', current_mode)
 
 GPIO.setmode(GPIO.BCM)
 
 # setup button
 mode_toggle_button = Button(BUTTON_PIN, handle_button_press)
-
 try:
     while True:
         mode_toggle_button.read_state()
