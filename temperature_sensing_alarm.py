@@ -22,7 +22,7 @@ from time import sleep
 
 # BCM PIN numbers for inputs
 TEMP_SENSOR_PIN = 16
-BUTTON_PIN = 6
+BUTTON_PIN = 5
 
 # constants for outputs
 LCD_ADDRESS = 0x3f # TODO: verify this via `i2cdetect -y 1`
@@ -30,6 +30,7 @@ LCD_BACKLIGHT_ON = 1
 LCD_WIDTH = 16 # LCD width is 16 characters
 ADC_CHANNEL = 0
 ADC_MAX_READING = 255
+BUZZER_PIN = 6
 
 # constants for program/monitor modes
 PROGRAM_MODE = 'program'
@@ -43,6 +44,7 @@ MAX_TEMP_F = 100
 current_mode = PROGRAM_MODE
 lcd_line_one = ""
 lcd_line_two = ""
+in_alarm = False
 trigger_temp = MAX_TEMP_F
 
 def celcius_to_fahrenheit(celcius):
@@ -73,6 +75,9 @@ ADC0834.setup()
 # setup LCD
 LCD1602.init(LCD_ADDRESS, LCD_BACKLIGHT_ON)
 
+# setup buzzer
+GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.HIGH)
+
 try:
     while True:
         mode_toggle_button.read_state()
@@ -83,15 +88,22 @@ try:
                 fahrenheit = celcius_to_fahrenheit(celcius)
                 lcd_line_one = f"Temp: {fahrenheit: .1f} F"
                 if fahrenheit > trigger_temp:
+                    in_alarm = True
                     lcd_line_two = "IN ALARM"
                 else:
+                    in_alarm = False
                     lcd_line_two = ""
         if current_mode == PROGRAM_MODE:
+            in_alarm = False
             reading = ADC0834.getResult(ADC_CHANNEL)
             reading ^= ADC_MAX_READING
             trigger_temp = map_adc_reading_to_temp(reading)
             lcd_line_one = f"Set Trigger Temp:"
             lcd_line_two = f"{trigger_temp: .1f} F"
+        if in_alarm:
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
+        else:
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
         LCD1602.write(0, 0, lcd_line_one.ljust(LCD_WIDTH, ' '))
         LCD1602.write(0, 1, lcd_line_two.ljust(LCD_WIDTH, ' '))
         sleep(.1)
