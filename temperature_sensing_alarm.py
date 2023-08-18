@@ -16,6 +16,7 @@
 import RPi.GPIO as GPIO
 import ADC0834
 import dht11
+from button import Button
 from time import sleep
 
 # BCM PIN numbers for inputs
@@ -32,14 +33,12 @@ def handle_button_press():
 GPIO.setmode(GPIO.BCM)
 
 # setup button
-GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, handle_button_press)
+mode_toggle_button = Button(BUTTON_PIN, handle_button_press)
 
 try:
     while True:
-        # button_state = GPIO.input(BUTTON_PIN)
-        # print(button_state)
-        sleep(.2)
+        mode_toggle_button.read_state()
+        sleep(.1)
 except KeyboardInterrupt:
     print('bye')
 
