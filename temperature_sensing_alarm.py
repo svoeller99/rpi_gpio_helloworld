@@ -56,7 +56,6 @@ def handle_button_press():
         current_mode = MONITOR_MODE
     else:
         current_mode = PROGRAM_MODE
-    print('button pressed - current mode: ', current_mode)
 
 def map_adc_reading_to_temp(adc_reading):
     return adc_reading * (MAX_TEMP_F - MIN_TEMP_F) / ADC_MAX_READING + MIN_TEMP_F
