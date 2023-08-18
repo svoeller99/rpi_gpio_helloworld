@@ -93,4 +93,5 @@ try:
 except KeyboardInterrupt:
     print('bye')
 
+LCD1602.clear()
 GPIO.cleanup()
