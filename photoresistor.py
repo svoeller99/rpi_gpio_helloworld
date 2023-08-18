@@ -10,7 +10,8 @@ ADC0834.setup()
 try:
     while True:
         reading = ADC0834.getResult(0)
-        print(reading)
+        if reading.is_valid():
+            print(reading)
         sleep(.2)
 except KeyboardInterrupt:
     print('bye')
