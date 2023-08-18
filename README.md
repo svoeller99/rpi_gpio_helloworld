@@ -88,3 +88,12 @@ Display the current temperature and humidity with a button to toggle between Cel
 
 The circuit:
 ![LCD Temp/Humidity Display](lcd_temperature_display.jpeg)
+
+## Buzzers - Active and Passive
+
+Make buzzers make sounds.
+
+[Active buzzer code](active_buzzer.py)
+
+The circuit (identical for both active/passive, except for the type of buzzer used):
+![Buzzer](buzzer.jpeg)
