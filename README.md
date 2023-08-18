@@ -71,6 +71,15 @@ Use an ultrasonic sensor to measure the distance of an object in inches.
 The circuit:
 ![Ultrasonic sensor](ultrasonic_sensor.jpeg)
 
+## Temperature / Humidity Detector
+
+Display the current temperature and humidity.
+
+[The code](temp_humidity_detector.py)
+
+The circuit:
+![Temp / Humidity Detector](temp_humidity_detector.jpeg)
+
 ## LCD Temperature / Humidity Display
 
 Display the current temperature and humidity with a button to toggle between Celcius and Fahrenheit.
