@@ -15,6 +15,7 @@
 
 import RPi.GPIO as GPIO
 import ADC0834
+import LCD1602
 import dht11
 from button import Button
 from time import sleep
@@ -25,6 +26,7 @@ BUTTON_PIN = 6
 
 # constants for outputs
 LCD_ADDRESS = 0x3f # TODO: verify this via `i2cdetect -y 1`
+LCD_BACKLIGHT_ON = 1
 ADC_CHANNEL = 0
 ADC_MAX_READING = 255
 
@@ -38,6 +40,8 @@ MAX_TEMP_F = 100
 
 # state
 current_mode = PROGRAM_MODE
+display_temp = ""
+display_humidity = ""
 
 def celcius_to_fahrenheit(celcius):
     return (celcius * 9/5) + 32
@@ -64,6 +68,9 @@ temp_hum_sensor = dht11.DHT11(pin = TEMP_SENSOR_PIN)
 # setup ADC
 ADC0834.setup()
 
+# setup LCD
+LCD1602.init(LCD_ADDRESS, LCD_BACKLIGHT_ON)
+
 try:
     while True:
         mode_toggle_button.read_state()
@@ -72,12 +79,16 @@ try:
             if reading.is_valid():
                 celcius = reading.temperature
                 fahrenheit = celcius_to_fahrenheit(celcius)
-                print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
+                display_temp = f"Temp: {fahrenheit: .1f} F"
+                display_humidity = f"Hum: {reading.humidity: .1f} %"
+                # print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
         if current_mode == PROGRAM_MODE:
             reading = ADC0834.getResult(ADC_CHANNEL)
             reading ^= ADC_MAX_READING
             temp = map_adc_reading_to_temp(reading)
             print(reading, ' - ', temp)
+        LCD1602.write(0, 0, display_temp)
+        LCD1602.write(0, 1, display_humidity)
         sleep(.2)
 except KeyboardInterrupt:
     print('bye')
