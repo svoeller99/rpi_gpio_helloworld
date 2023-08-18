@@ -76,7 +76,7 @@ ADC0834.setup()
 LCD1602.init(LCD_ADDRESS, LCD_BACKLIGHT_ON)
 
 # setup buzzer
-GPIO.setup(BUZZER_PIN, GPIO.OUT)
+# GPIO.setup(BUZZER_PIN, GPIO.OUT)
 
 try:
     while True:
