@@ -115,3 +115,6 @@ Photoresistor experiments.
 
 [Basic photoresistor test](photoresistor.py)
 [Photoresistor / motion detector alarm](photoresistor_motion_detector.py)
+
+The circuit:
+![Photoresistor experiments](photoresistor.jpeg)
