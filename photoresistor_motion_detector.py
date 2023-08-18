@@ -20,7 +20,7 @@ GPIO.setmode(GPIO.BCM)
 ADC0834.setup()
 
 GPIO.setup(PIR_PIN, GPIO.IN)
-GPIO.setup(BUZZER_PIN, GPIO.OUT)
+GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
 def evaluate_readings(photoresistor_reading, pir_reading):
     global consecutive_pir_readings, consecutive_low_light_readings
