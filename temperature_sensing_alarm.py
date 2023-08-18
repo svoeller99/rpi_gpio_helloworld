@@ -53,6 +53,9 @@ mode_toggle_button = Button(BUTTON_PIN, handle_button_press)
 # setup DHT
 temp_hum_sensor = dht11.DHT11(pin = TEMP_SENSOR_PIN)
 
+# setup ADC
+ADC0834.setup()
+
 try:
     while True:
         mode_toggle_button.read_state()
@@ -62,7 +65,10 @@ try:
                 celcius = reading.temperature
                 fahrenheit = celcius_to_fahrenheit(celcius)
                 print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
-        sleep(.1)
+        if current_mode == PROGRAM_MODE:
+            reading = ADC0834.getResult(ADC_CHANNEL)
+            print(reading)
+        sleep(.2)
 except KeyboardInterrupt:
     print('bye')
 
