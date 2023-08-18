@@ -99,3 +99,12 @@ Make buzzers make sounds.
 
 The circuit (identical for both active/passive, except for the type of buzzer used):
 ![Buzzer](buzzer.jpeg)
+
+## Temperature Sensor With Configurable Alarm
+
+Temperature sensor with configurable temperature that - if exceeded - will cause a buzzer to sound.
+
+[The code](temperature_sensing_alarm.py)
+
+The circuit:
+![Temperature Sensor With Configurable Alarm](temperature_sensing_alarm.jpeg)
