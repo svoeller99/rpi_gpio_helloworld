@@ -52,3 +52,12 @@ Control a servo using PWM given a user-supplied percentage.
 
 The circuit:
 ![Servo Control via PWM](pwm_servo.jpeg)
+
+## LCD Temperature / Humidity Display
+
+Display the current temperature and humidity with a button to toggle between Celcius and Fahrenheit.
+
+[The code](lcd_temperature_display.py)
+
+The circuit:
+![LCD Temp/Humidity Display](lcd_temperature_display.jpeg)
