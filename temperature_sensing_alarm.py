@@ -20,7 +20,7 @@ from button import Button
 from time import sleep
 
 # BCM PIN numbers for inputs
-TEMP_SENSOR_PIN = 17
+TEMP_SENSOR_PIN = 16
 BUTTON_PIN = 6
 
 # constants for outputs
