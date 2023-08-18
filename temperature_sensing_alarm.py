@@ -89,8 +89,8 @@ try:
             temp = map_adc_reading_to_temp(reading)
             lcd_line_one = f"Set Trigger Temp:"
             lcd_line_two = f"{temp: .1f} F"
-        LCD1602.write(0, 0, lcd_line_one.rjust(LCD_WIDTH, ' '))
-        LCD1602.write(0, 1, lcd_line_two.rjust(LCD_WIDTH, ' '))
+        LCD1602.write(0, 0, lcd_line_one.ljust(LCD_WIDTH, ' '))
+        LCD1602.write(0, 1, lcd_line_two.ljust(LCD_WIDTH, ' '))
         sleep(.2)
 except KeyboardInterrupt:
     print('bye')
