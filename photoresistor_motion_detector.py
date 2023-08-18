@@ -36,7 +36,13 @@ def evaluate_readings(photoresistor_reading, pir_reading):
         consecutive_pir_readings += 1
     
     print(consecutive_low_light_readings, ' - ', consecutive_pir_readings)
-    # TODO: logic to trip buzzer, here
+
+    if consecutive_low_light_readings >= LOW_LIGHT_READINGS_THRESHOLD and consecutive_pir_readings >= MOTION_DETECTION_THRESHOLD:
+        print('TIME TO SOUND THE ALARM!')
+        # TODO: turn buzzer on here
+    else:
+        # TODO: turn buzzer off here
+        pass
 
 try:
     while True:
