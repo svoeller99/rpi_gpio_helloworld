@@ -76,7 +76,7 @@ ADC0834.setup()
 LCD1602.init(LCD_ADDRESS, LCD_BACKLIGHT_ON)
 
 # setup buzzer
-# GPIO.setup(BUZZER_PIN, GPIO.OUT)
+GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.LOW)
 
 try:
     while True:
@@ -101,8 +101,9 @@ try:
             lcd_line_one = f"Set Trigger Temp:"
             lcd_line_two = f"{trigger_temp: .1f} F"
         if in_alarm:
-            pass
-            # GPIO.output(BUZZER_PIN, GPIO.LOW)
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
+        else:
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
         LCD1602.write(0, 0, lcd_line_one.ljust(LCD_WIDTH, ' '))
         LCD1602.write(0, 1, lcd_line_two.ljust(LCD_WIDTH, ' '))
         sleep(.1)
