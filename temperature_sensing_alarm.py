@@ -43,6 +43,7 @@ MAX_TEMP_F = 100
 current_mode = PROGRAM_MODE
 lcd_line_one = ""
 lcd_line_two = ""
+trigger_temp = MAX_TEMP_F
 
 def celcius_to_fahrenheit(celcius):
     return (celcius * 9/5) + 32
@@ -81,14 +82,16 @@ try:
                 celcius = reading.temperature
                 fahrenheit = celcius_to_fahrenheit(celcius)
                 lcd_line_one = f"Temp: {fahrenheit: .1f} F"
-                lcd_line_two = f"Hum: {reading.humidity: .1f} %"
-                # print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
+                if fahrenheit > trigger_temp:
+                    lcd_line_two = "IN ALARM"
+                else:
+                    lcd_line_two = ""
         if current_mode == PROGRAM_MODE:
             reading = ADC0834.getResult(ADC_CHANNEL)
             reading ^= ADC_MAX_READING
-            temp = map_adc_reading_to_temp(reading)
+            trigger_temp = map_adc_reading_to_temp(reading)
             lcd_line_one = f"Set Trigger Temp:"
-            lcd_line_two = f"{temp: .1f} F"
+            lcd_line_two = f"{trigger_temp: .1f} F"
         LCD1602.write(0, 0, lcd_line_one.ljust(LCD_WIDTH, ' '))
         LCD1602.write(0, 1, lcd_line_two.ljust(LCD_WIDTH, ' '))
         sleep(.2)
