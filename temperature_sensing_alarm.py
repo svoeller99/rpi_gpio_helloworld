@@ -111,4 +111,5 @@ except KeyboardInterrupt:
     print('bye')
 
 LCD1602.clear()
+sleep(.5)
 GPIO.cleanup()
