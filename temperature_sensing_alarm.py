@@ -26,10 +26,15 @@ BUTTON_PIN = 6
 # constants for outputs
 LCD_ADDRESS = 0x3f # TODO: verify this via `i2cdetect -y 1`
 ADC_CHANNEL = 0
+ADC_MAX_READING = 255
 
 # constants for program/monitor modes
 PROGRAM_MODE = 'program'
 MONITOR_MODE = 'monitor'
+
+# constants for min/max temperatures
+MIN_TEMP_F = 32
+MAX_TEMP_F = 100
 
 # state
 current_mode = PROGRAM_MODE
@@ -44,6 +49,9 @@ def handle_button_press():
     else:
         current_mode = PROGRAM_MODE
     print('button pressed - current mode: ', current_mode)
+
+def map_adc_reading_to_temp(adc_reading):
+    return adc_reading * (MAX_TEMP_F - MIN_TEMP_F) / ADC_MAX_READING + MIN_TEMP_F
 
 GPIO.setmode(GPIO.BCM)
 
@@ -67,8 +75,9 @@ try:
                 print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
         if current_mode == PROGRAM_MODE:
             reading = ADC0834.getResult(ADC_CHANNEL)
-            reading ^= 255
-            print(reading)
+            reading ^= ADC_MAX_READING
+            temp = map_adc_reading_to_temp(reading)
+            print(reading, ' - ', temp)
         sleep(.2)
 except KeyboardInterrupt:
     print('bye')
