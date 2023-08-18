@@ -27,6 +27,7 @@ BUTTON_PIN = 6
 # constants for outputs
 LCD_ADDRESS = 0x3f # TODO: verify this via `i2cdetect -y 1`
 LCD_BACKLIGHT_ON = 1
+LCD_WIDTH = 16 # LCD width is 16 characters
 ADC_CHANNEL = 0
 ADC_MAX_READING = 255
 
@@ -91,8 +92,8 @@ try:
             temp = map_adc_reading_to_temp(reading)
             lcd_line_one = f"Set Trigger Temp:"
             lcd_line_two = f"{temp: .1f} F"
-        LCD1602.write(0, 0, lcd_line_one)
-        LCD1602.write(0, 1, lcd_line_two)
+        LCD1602.write(0, 0, lcd_line_one.rjust(LCD_WIDTH, ' '))
+        LCD1602.write(0, 1, lcd_line_two.rjust(LCD_WIDTH, ' '))
         sleep(.2)
 except KeyboardInterrupt:
     print('bye')
