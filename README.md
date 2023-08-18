@@ -108,3 +108,10 @@ Temperature sensor with configurable temperature that - if exceeded - will cause
 
 The circuit:
 ![Temperature Sensor With Configurable Alarm](temperature_sensing_alarm.jpeg)
+
+## Photoresistor
+
+Photoresistor experiments.
+
+[Basic photoresistor test](photoresistor.py)
+[Photoresistor / motion detector alarm](photoresistor_motion_detector.py)
