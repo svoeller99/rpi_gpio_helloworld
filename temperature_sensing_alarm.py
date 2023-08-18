@@ -40,8 +40,8 @@ MAX_TEMP_F = 100
 
 # state
 current_mode = PROGRAM_MODE
-display_temp = ""
-display_humidity = ""
+lcd_line_one = ""
+lcd_line_two = ""
 
 def celcius_to_fahrenheit(celcius):
     return (celcius * 9/5) + 32
@@ -79,16 +79,17 @@ try:
             if reading.is_valid():
                 celcius = reading.temperature
                 fahrenheit = celcius_to_fahrenheit(celcius)
-                display_temp = f"Temp: {fahrenheit: .1f} F"
-                display_humidity = f"Hum: {reading.humidity: .1f} %"
+                lcd_line_one = f"Temp: {fahrenheit: .1f} F"
+                lcd_line_two = f"Hum: {reading.humidity: .1f} %"
                 # print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
         if current_mode == PROGRAM_MODE:
             reading = ADC0834.getResult(ADC_CHANNEL)
             reading ^= ADC_MAX_READING
             temp = map_adc_reading_to_temp(reading)
-            print(reading, ' - ', temp)
-        LCD1602.write(0, 0, display_temp)
-        LCD1602.write(0, 1, display_humidity)
+            lcd_line_one = f"Set Trigger Temp:"
+            lcd_line_two = f"{temp: .1f} F"
+        LCD1602.write(0, 0, lcd_line_one)
+        LCD1602.write(0, 1, lcd_line_two)
         sleep(.2)
 except KeyboardInterrupt:
     print('bye')
