@@ -95,5 +95,7 @@ Make buzzers make sounds.
 
 [Active buzzer code](active_buzzer.py)
 
+[Passive buzzer code](passive_buzzer.py)
+
 The circuit (identical for both active/passive, except for the type of buzzer used):
 ![Buzzer](buzzer.jpeg)
