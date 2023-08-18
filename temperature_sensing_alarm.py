@@ -34,6 +34,9 @@ MONITOR_MODE = 'monitor'
 # state
 current_mode = PROGRAM_MODE
 
+def celcius_to_fahrenheit(celcius):
+    return (celcius * 9/5) + 32
+
 def handle_button_press():
     global current_mode
     if current_mode == PROGRAM_MODE:
@@ -46,9 +49,19 @@ GPIO.setmode(GPIO.BCM)
 
 # setup button
 mode_toggle_button = Button(BUTTON_PIN, handle_button_press)
+
+# setup DHT
+temp_hum_sensor = dht11.DHT11(pin = TEMP_SENSOR_PIN)
+
 try:
     while True:
         mode_toggle_button.read_state()
+        if current_mode == MONITOR_MODE:
+            reading = temp_hum_sensor.read()
+            if reading.is_valid():
+                celcius = reading.temperature
+                fahrenheit = celcius_to_fahrenheit(celcius)
+                print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
         sleep(.1)
 except KeyboardInterrupt:
     print('bye')
