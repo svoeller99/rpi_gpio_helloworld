@@ -70,3 +70,32 @@ Use an ultrasonic sensor to measure the distance of an object in inches.
 
 The circuit:
 ![Ultrasonic sensor](ultrasonic_sensor.jpeg)
+
+## Temperature / Humidity Detector
+
+Display the current temperature and humidity.
+
+[The code](temp_humidity_detector.py)
+
+The circuit:
+![Temp / Humidity Detector](temp_humidity_detector.jpeg)
+
+## LCD Temperature / Humidity Display
+
+Display the current temperature and humidity with a button to toggle between Celcius and Fahrenheit.
+
+[The code](lcd_temperature_display.py)
+
+The circuit:
+![LCD Temp/Humidity Display](lcd_temperature_display.jpeg)
+
+## Buzzers - Active and Passive
+
+Make buzzers make sounds.
+
+[Active buzzer code](active_buzzer.py)
+
+[Passive buzzer code](passive_buzzer.py)
+
+The circuit (identical for both active/passive, except for the type of buzzer used):
+![Buzzer](buzzer.jpeg)
