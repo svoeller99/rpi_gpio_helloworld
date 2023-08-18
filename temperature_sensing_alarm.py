@@ -67,6 +67,7 @@ try:
                 print(f"Temperature {fahrenheit: .2f} F. Humidity is {reading.humidity: .2f}%.")
         if current_mode == PROGRAM_MODE:
             reading = ADC0834.getResult(ADC_CHANNEL)
+            reading ^= 255
             print(reading)
         sleep(.2)
 except KeyboardInterrupt:
