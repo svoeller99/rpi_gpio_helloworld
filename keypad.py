@@ -19,7 +19,7 @@ try:
                 if GPIO.input(col_pin) == 1:
                     print(f"row {row_idx} col {col_idx}")
             GPIO.output(row_pin, GPIO.LOW)
-        sleep(.5)
+        sleep(.2)
         
 except KeyboardInterrupt:
     print('bye')
