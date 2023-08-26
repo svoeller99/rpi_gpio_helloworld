@@ -10,7 +10,9 @@ stop_event = threading.Event()
 
 def read_from_keypad():
     global key_pad, stop_event
-    while not stop_event.is_set():
+    while True:
+        if stop_event.is_set():
+            break
         entered_sequence = key_pad.read()
         print(entered_sequence)
 
@@ -22,6 +24,7 @@ try:
         time.sleep(.1)
         
 except KeyboardInterrupt:
+    print("Got keyboard interrupt")
     stop_event.set()
     keypad_thread.join()
     print('bye')
