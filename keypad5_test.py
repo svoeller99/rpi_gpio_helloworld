@@ -15,7 +15,7 @@ def read_from_keypad(stop_event):
         entered_sequence = key_pad.read()
         print(entered_sequence)
 
-keypad_thread = threading.Thread(target=read_from_keypad, args=(stop_event))
+keypad_thread = threading.Thread(target=read_from_keypad, args=(stop_event,))
 
 try:
     keypad_thread.start()
