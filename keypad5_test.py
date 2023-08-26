@@ -12,7 +12,7 @@ def read_from_keypad():
         print(entered_sequence)
 
 try:
-    keypad_thread = threading.Thread(read_from_keypad, args=None)
+    keypad_thread = threading.Thread(target=read_from_keypad)
     keypad_thread.start()
     keypad_thread.join()
         
