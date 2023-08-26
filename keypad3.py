@@ -31,12 +31,13 @@ try:
                     button_pressed = BUTTONS[row_idx][col_idx]
             GPIO.output(row_pin, GPIO.LOW)
         if button_pressed != last_button_pressed:
+            last_buttons_pressed = button_pressed
             if button_pressed == 'D':
                 print("".join(buttons_pressed))
                 buttons_pressed = []
+                last_buttons_pressed = None
             elif button_pressed:
                 buttons_pressed.append(button_pressed)
-            last_buttons_pressed = button_pressed
         sleep(.2)
         
 except KeyboardInterrupt:
