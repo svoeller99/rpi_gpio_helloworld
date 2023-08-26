@@ -8,7 +8,8 @@ try:
     key_pad = KeyPad()
 
     while True:
-        key_pad.sample()
+        entered_sequence = key_pad.read()
+        print(entered_sequence)
         sleep(.05)
         
 except KeyboardInterrupt:

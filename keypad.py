@@ -24,7 +24,7 @@ class KeyPad:
         for pin in self.row_pins: GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
         for pin in self.column_pins: GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-    def sample(self):
+    def read(self):
         # cycle through row pins and turn each on, followed by reading each column pin in a nested loop to detect what keys are pressed
         button_pressed = None
         for row_idx, row_pin in enumerate(self.row_pins):
@@ -36,7 +36,8 @@ class KeyPad:
         if button_pressed != self.last_button_pressed:
             self.last_button_pressed = button_pressed
             if button_pressed == self.return_char:
-                print("".join(self.buttons_pressed))
+                entered_sequence = "".join(self.buttons_pressed)
                 self.buttons_pressed = []
+                return entered_sequence
             elif button_pressed:
                 self.buttons_pressed.append(button_pressed)
