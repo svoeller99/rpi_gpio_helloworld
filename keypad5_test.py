@@ -11,12 +11,8 @@ do_continue = True
 def read_from_keypad():
     global key_pad
     while do_continue:
-        try:
-            entered_sequence = key_pad.read()
-            print(entered_sequence)
-        except Exception as e:
-            print(e)
-    GPIO.cleanup()
+        entered_sequence = key_pad.read()
+        print(entered_sequence)
 
 keypad_thread = threading.Thread(target=read_from_keypad)
 
@@ -29,3 +25,5 @@ except KeyboardInterrupt:
     do_continue = False
     keypad_thread.join()
     print('bye')
+
+GPIO.cleanup()
