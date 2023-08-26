@@ -13,8 +13,8 @@ def read_from_keypad():
             entered_sequence = key_pad.read()
             print(entered_sequence)
         except Exception as e:
+            print(e)
             GPIO.cleanup()
-            raise e
 
 keypad_thread = threading.Thread(target=read_from_keypad)
 
