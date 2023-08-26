@@ -2,6 +2,7 @@
 
 import RPi.GPIO as GPIO
 import threading
+import time
 from keypad import KeyPad
 
 key_pad = KeyPad()
@@ -22,7 +23,7 @@ keypad_thread = threading.Thread(target=read_from_keypad)
 try:
     keypad_thread.start()
     while True:
-        pass
+        time.sleep(1)
         
 except KeyboardInterrupt:
     do_continue = False
