@@ -30,7 +30,8 @@ try:
                     buttons_pressed.append(BUTTONS[row_idx][col_idx])
             GPIO.output(row_pin, GPIO.LOW)
         if buttons_pressed != last_buttons_pressed:
-            print(buttons_pressed)
+            if buttons_pressed:
+                print(buttons_pressed)
             last_buttons_pressed = buttons_pressed
         sleep(.2)
         
