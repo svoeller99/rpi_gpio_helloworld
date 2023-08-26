@@ -26,20 +26,21 @@ class KeyPad:
         for pin in self.column_pins: GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def read(self):
-        # cycle through row pins and turn each on, followed by reading each column pin in a nested loop to detect what keys are pressed
-        button_pressed = None
-        for row_idx, row_pin in enumerate(self.row_pins):
-            GPIO.output(row_pin, GPIO.HIGH)
-            for col_idx, col_pin in enumerate(self.column_pins):
-                if GPIO.input(col_pin) == GPIO.HIGH:
-                    button_pressed = self.BUTTONS[row_idx][col_idx]
-            GPIO.output(row_pin, GPIO.LOW)
-        if button_pressed != self.last_button_pressed:
-            self.last_button_pressed = button_pressed
-            if button_pressed == self.return_char:
-                entered_sequence = "".join(self.buttons_pressed)
-                self.buttons_pressed = []
-                return entered_sequence
-            elif button_pressed:
-                self.buttons_pressed.append(button_pressed)
-        sleep(.05)
+        while True:
+            # cycle through row pins and turn each on, followed by reading each column pin in a nested loop to detect what keys are pressed
+            button_pressed = None
+            for row_idx, row_pin in enumerate(self.row_pins):
+                GPIO.output(row_pin, GPIO.HIGH)
+                for col_idx, col_pin in enumerate(self.column_pins):
+                    if GPIO.input(col_pin) == GPIO.HIGH:
+                        button_pressed = self.BUTTONS[row_idx][col_idx]
+                GPIO.output(row_pin, GPIO.LOW)
+            if button_pressed != self.last_button_pressed:
+                self.last_button_pressed = button_pressed
+                if button_pressed == self.return_char:
+                    entered_sequence = "".join(self.buttons_pressed)
+                    self.buttons_pressed = []
+                    return entered_sequence
+                elif button_pressed:
+                    self.buttons_pressed.append(button_pressed)
+            sleep(.05)
