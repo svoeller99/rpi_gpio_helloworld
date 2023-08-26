@@ -37,8 +37,9 @@ try:
                 buttons_pressed = []
                 last_buttons_pressed = None
             elif button_pressed:
+                print(button_pressed)
                 buttons_pressed.append(button_pressed)
-        sleep(.2)
+        sleep(.1)
         
 except KeyboardInterrupt:
     print('bye')
