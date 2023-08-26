@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
+from threading import Event
 
 class KeyPad:
     BUTTONS = [
@@ -12,10 +13,11 @@ class KeyPad:
     DEFAULT_COL_PINS = [10,22,27,17]
     DEFAULT_RETURN_CHAR = 'D'
 
-    def __init__(self, row_pins=DEFAULT_ROW_PINS.copy(), column_pins=DEFAULT_COL_PINS.copy(), return_char=DEFAULT_RETURN_CHAR):
+    def __init__(self, row_pins=DEFAULT_ROW_PINS.copy(), column_pins=DEFAULT_COL_PINS.copy(), return_char=DEFAULT_RETURN_CHAR, stop_event=Event()):
         self.row_pins = row_pins
         self.column_pins = column_pins
         self.return_char = return_char
+        self.stop_event = stop_event
         self.last_button_pressed = None
         self.buttons_pressed = []
         self.__init_gpio()
@@ -27,6 +29,8 @@ class KeyPad:
 
     def read(self):
         while True:
+            if self.stop_event.is_set():
+                return ""
             # cycle through row pins and turn each on, followed by reading each column pin in a nested loop to detect what keys are pressed
             button_pressed = None
             for row_idx, row_pin in enumerate(self.row_pins):

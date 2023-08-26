@@ -8,7 +8,7 @@ from keypad import KeyPad
 stop_event = threading.Event()
 
 def read_from_keypad(stop_event):
-    key_pad = KeyPad()
+    key_pad = KeyPad(stop_event=stop_event)
     while True:
         if stop_event.is_set():
             break
