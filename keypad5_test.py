@@ -21,7 +21,8 @@ keypad_thread = threading.Thread(target=read_from_keypad)
 
 try:
     keypad_thread.start()
-    keypad_thread.join()
+    while True:
+        pass
         
 except KeyboardInterrupt:
     do_continue = False
