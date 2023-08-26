@@ -35,7 +35,6 @@ try:
             if button_pressed == 'D':
                 print("".join(buttons_pressed))
                 buttons_pressed = []
-                last_button_pressed = None
             elif button_pressed:
                 buttons_pressed.append(button_pressed)
         sleep(.05)

@@ -38,6 +38,5 @@ class KeyPad:
             if button_pressed == self.return_char:
                 print("".join(self.buttons_pressed))
                 self.buttons_pressed = []
-                self.last_button_pressed = None
             elif button_pressed:
                 self.buttons_pressed.append(button_pressed)
