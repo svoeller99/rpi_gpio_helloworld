@@ -5,18 +5,17 @@ import threading
 import time
 from keypad import KeyPad
 
-key_pad = KeyPad()
 stop_event = threading.Event()
 
-def read_from_keypad():
-    global key_pad, stop_event
+def read_from_keypad(stop_event):
+    key_pad = KeyPad()
     while True:
         if stop_event.is_set():
             break
         entered_sequence = key_pad.read()
         print(entered_sequence)
 
-keypad_thread = threading.Thread(target=read_from_keypad)
+keypad_thread = threading.Thread(target=read_from_keypad, args=(stop_event))
 
 try:
     keypad_thread.start()
