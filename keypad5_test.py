@@ -6,11 +6,11 @@ import time
 from keypad import KeyPad
 
 key_pad = KeyPad()
-do_continue = True
+stop_event = threading.Event()
 
 def read_from_keypad():
-    global key_pad, do_continue
-    while do_continue:
+    global key_pad, stop_event
+    while not stop_event.is_set():
         entered_sequence = key_pad.read()
         print(entered_sequence)
 
@@ -22,7 +22,7 @@ try:
         time.sleep(.1)
         
 except KeyboardInterrupt:
-    do_continue = False
+    stop_event.set()
     keypad_thread.join()
     print('bye')
 
