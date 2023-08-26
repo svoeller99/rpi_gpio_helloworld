@@ -17,7 +17,6 @@ class KeyPad:
         self.column_pins = column_pins
         self.return_char = return_char
         self.last_button_pressed = None
-        self.do_run = True
         self.buttons_pressed = []
         self.__init_gpio()
 
@@ -27,7 +26,7 @@ class KeyPad:
         for pin in self.column_pins: GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def read(self):
-        while self.do_run:
+        while True:
             # cycle through row pins and turn each on, followed by reading each column pin in a nested loop to detect what keys are pressed
             button_pressed = None
             for row_idx, row_pin in enumerate(self.row_pins):
@@ -45,6 +44,3 @@ class KeyPad:
                 elif button_pressed:
                     self.buttons_pressed.append(button_pressed)
             sleep(.05)
-
-    def stop(self):
-        self.do_run = False
