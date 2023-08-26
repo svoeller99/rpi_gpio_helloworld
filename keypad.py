@@ -26,7 +26,7 @@ try:
         for row_idx, row_pin in enumerate(ROW_PINS):
             GPIO.output(row_pin, GPIO.HIGH)
             for col_idx, col_pin in enumerate(COL_PINS):
-                if GPIO.input(col_pin) == 1:
+                if GPIO.input(col_pin) == GPIO.HIGH:
                     buttons_pressed.append(BUTTONS[row_idx][col_idx])
             GPIO.output(row_pin, GPIO.LOW)
         if buttons_pressed != last_buttons_pressed:
