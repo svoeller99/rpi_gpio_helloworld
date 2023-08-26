@@ -23,7 +23,6 @@ try:
         time.sleep(.1)
         
 except KeyboardInterrupt:
-    print("Got keyboard interrupt")
     stop_event.set()
     keypad_thread.join()
     print('bye')
