@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from time import sleep
 
 class KeyPad:
     BUTTONS = [
@@ -41,3 +42,4 @@ class KeyPad:
                 return entered_sequence
             elif button_pressed:
                 self.buttons_pressed.append(button_pressed)
+        sleep(.05)
