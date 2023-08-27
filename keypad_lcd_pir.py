@@ -6,10 +6,11 @@ import threading
 import time
 from RPi import GPIO
 from keypad import KeyPad
+from i2caddr import I2C_ADDR
 import LCD1602
 
 read_from_keypad_stop_event = threading.Event()
-LCD1602.init(0x3f, 1)
+LCD1602.init(I2C_ADDR, 1)
 
 is_armed = False
 passcode = '1234'
