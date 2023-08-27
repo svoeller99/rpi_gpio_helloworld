@@ -55,7 +55,10 @@ def handle_command():
         passcode = command_string
         show_brief_message('New Passcode: ', passcode)
     else:
+        # command_string = ''
+        # prior_command_string = ''
         show_brief_message('Unknown command')
+    prior_command_string = command_string
 
 
 keypad_thread = threading.Thread(target=read_from_keypad, args=(read_from_keypad_stop_event,))
