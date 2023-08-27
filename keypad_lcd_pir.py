@@ -15,6 +15,7 @@ LCD1602.init(I2C_ADDR, 1)
 is_armed = False
 passcode = '1234'
 command_string = ''
+prior_command_string = ''
 
 def output_to_lcd(line_one, line_two=None):
     """Output a string to the LCD display."""
@@ -38,7 +39,9 @@ def show_brief_message(line_one, line_two=None):
     output_to_lcd('')
 
 def handle_command():
-    global passcode, is_armed, command_string
+    global passcode, is_armed, command_string, prior_command_string
+    if command_string == prior_command_string:
+        return
     if command_string == 'A'+passcode:
         is_armed = True
         output_to_lcd('Armed      ')
