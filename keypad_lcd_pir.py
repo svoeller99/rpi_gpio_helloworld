@@ -49,7 +49,7 @@ def handle_command():
         output_to_lcd('New Passcode? ')
         while command_string == 'C'+passcode:
             pass
-        passcode = command_string[1:len(command_string)]
+        passcode = command_string
         show_brief_message('New Passcode: ', passcode)
     else:
         show_brief_message('Unknown command')
