@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from i2caddr import I2C_ADDR
 import RPi.GPIO as GPIO
 import LCD1602
 import dht11
@@ -14,7 +15,7 @@ BUTTON_PIN = 16
 
 # first arg - address that can be obtained by running `i2cdetect -y 1`
 # second arg - whether or not to backlight the LCD (1=true, 0=false)
-LCD1602.init(0x3f, 1)
+LCD1602.init(I2C_ADDR, 1)
 
 GPIO.setmode(GPIO.BCM)
 dht = dht11.DHT11(pin = DHT_PIN)

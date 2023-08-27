@@ -2,10 +2,11 @@
 
 import LCD1602
 import smbus2
+from i2caddr import I2C_ADDR
 
 # first arg - address that can be obtained by running `i2cdetect -y 1`
 # second arg - whether or not to backlight the LCD (1=true, 0=false)
-LCD1602.init(0x3f, 1)
+LCD1602.init(I2C_ADDR, 1)
 
 try:
     while True:

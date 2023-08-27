@@ -4,12 +4,13 @@
 
 import threading
 import time
+from i2caddr import I2C_ADDR
 from RPi import GPIO
 from keypad import KeyPad
 import LCD1602
 
 read_from_keypad_stop_event = threading.Event()
-LCD1602.init(0x3f, 1)
+LCD1602.init(I2C_ADDR, 1)
 
 def output_to_lcd(output):
     """Output a string to the LCD display."""

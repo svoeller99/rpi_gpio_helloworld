@@ -17,6 +17,7 @@ import RPi.GPIO as GPIO
 import ADC0834
 import LCD1602
 import dht11
+from i2caddr import I2C_ADDR
 from button import Button
 from time import sleep
 
@@ -25,7 +26,7 @@ TEMP_SENSOR_PIN = 16
 BUTTON_PIN = 5
 
 # constants for outputs
-LCD_ADDRESS = 0x3f # TODO: verify this via `i2cdetect -y 1`
+LCD_ADDRESS = I2C_ADDR # TODO: verify this via `i2cdetect -y 1`
 LCD_BACKLIGHT_ON = 1
 LCD_WIDTH = 16 # LCD width is 16 characters
 ADC_CHANNEL = 0
