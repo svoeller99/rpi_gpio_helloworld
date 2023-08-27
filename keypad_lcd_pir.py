@@ -54,9 +54,9 @@ def handle_command():
             pass
         passcode = command_string
         show_brief_message('New Passcode: ', passcode)
+    elif command_string[0:1] in ['A', 'B', 'C']:
+        show_brief_message('Bad Passcode')
     else:
-        # command_string = ''
-        # prior_command_string = ''
         show_brief_message('Unknown command')
     prior_command_string = command_string
 
