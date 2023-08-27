@@ -31,22 +31,27 @@ def read_from_keypad(stop_event):
             break
         command_string = key_pad.read()
 
+def show_brief_message(line_one, line_two=None):
+    output_to_lcd(line_one, line_two)
+    time.sleep(2)
+    output_to_lcd('')
+
 def handle_command():
     global passcode, is_armed, command_string
     if command_string == 'A'+passcode:
         is_armed = True
         output_to_lcd('Armed      ')
-    if command_string == 'B'+passcode:
+    elif command_string == 'B'+passcode:
         is_armed = False
         output_to_lcd('Disarmed   ')
-    if command_string == 'C'+passcode:
+    elif command_string == 'C'+passcode:
         output_to_lcd('New Passcode? ')
         while command_string == 'C'+passcode:
             pass
         passcode = command_string[1:len(command_string)]
-        output_to_lcd('New Passcode: ', passcode)
-        time.sleep(2)
-        output_to_lcd('')
+        show_brief_message('New Passcode: ', passcode)
+    else:
+        show_brief_message('Unknown command')
 
 
 keypad_thread = threading.Thread(target=read_from_keypad, args=(read_from_keypad_stop_event,))
