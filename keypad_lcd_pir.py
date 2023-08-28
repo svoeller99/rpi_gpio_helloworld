@@ -7,15 +7,24 @@ import time
 from RPi import GPIO
 from keypad import KeyPad
 from i2caddr import I2C_ADDR
+from typing import List
 import LCD1602
 
-read_from_keypad_stop_event = threading.Event()
-LCD1602.init(I2C_ADDR, 1)
+# BCM pin numbers
+PIR_PIN = 6
+BUZZER_PIN = 26
 
+# Constants
+MOTION_DETECTION_THRESHOLD = 5
+MIN_ALARM_TIME = 5 # seconds
+
+# State
 is_armed = False
 passcode = '1234'
 command_string = ''
 prior_command_string = ''
+consecutive_pir_readings = 0
+alarm_start_time = 0
 
 def output_to_lcd(line_one, line_two=None):
     """Output a string to the LCD display."""
@@ -32,6 +41,34 @@ def read_from_keypad(stop_event):
         if stop_event.is_set():
             break
         command_string = key_pad.read()
+
+def detect_motion(stop_event):
+    global is_armed, consecutive_pir_readings
+    while True:
+        if stop_event.is_set():
+            break
+        pir_reading = GPIO.input(PIR_PIN)
+        if pir_reading == 0:
+            consecutive_pir_readings = 0
+        else:
+            consecutive_pir_readings += 1
+
+def evaluate_alarm_threshold(stop_event):
+    global consecutive_pir_readings, alarm_start_time
+    while True:
+        if stop_event.is_set():
+            break
+        if not is_armed:
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
+            return
+        if consecutive_pir_readings >= MOTION_DETECTION_THRESHOLD:
+            print('TIME TO SOUND THE ALARM!')
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
+            alarm_start_time = time.time()
+        else:
+            current_time = time.time()
+            if current_time - alarm_start_time > MIN_ALARM_TIME:
+                GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
 def show_brief_message(line_one, line_two=None):
     output_to_lcd(line_one, line_two)
@@ -60,18 +97,38 @@ def handle_command():
         show_brief_message('Unknown command')
     prior_command_string = command_string
 
+# initialize LCD display
+LCD1602.init(I2C_ADDR, 1)
 
-keypad_thread = threading.Thread(target=read_from_keypad, args=(read_from_keypad_stop_event,))
+# initialize GPIO pins
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIR_PIN, GPIO.IN)
+GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.HIGH)
+
+# event to trigger thread stop
+program_stop_event = threading.Event()
+
+# list of threads
+threads : List[threading.Thread] = []
+
+# thread for reading from keypad
+threads.append(threading.Thread(target=read_from_keypad, args=(program_stop_event,)))
+
+# thread for evaluating motion detection
+threads.append(threading.Thread(target=detect_motion, args=(program_stop_event,)))
+
+# thread for evaluating whether to sound alarm
+threads.append(threading.Thread(target=evaluate_alarm_threshold, args=(program_stop_event,)))
 
 try:
-    keypad_thread.start()
+    for thread in threads: thread.start()
     while True:
         handle_command()
         time.sleep(.1)
 
 except KeyboardInterrupt:
-    read_from_keypad_stop_event.set()
-    keypad_thread.join()
+    program_stop_event.set()
+    for thread in threads: thread.join()
     print('bye')
 
 GPIO.cleanup()
