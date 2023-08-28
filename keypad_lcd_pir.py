@@ -108,17 +108,14 @@ GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.HIGH)
 # event to trigger thread stop
 program_stop_event = threading.Event()
 
-# list of threads
-threads : List[threading.Thread] = []
+# list of async functions
+async_functions = [
+    read_from_keypad, 
+    detect_motion, 
+    evaluate_alarm_threshold
+]
 
-# thread for reading from keypad
-threads.append(threading.Thread(target=read_from_keypad, args=(program_stop_event,)))
-
-# thread for evaluating motion detection
-threads.append(threading.Thread(target=detect_motion, args=(program_stop_event,)))
-
-# thread for evaluating whether to sound alarm
-threads.append(threading.Thread(target=evaluate_alarm_threshold, args=(program_stop_event,)))
+threads = list(map(lambda func: threading.Thread(target=func, args=(program_stop_event,), daemon=True), async_functions))
 
 try:
     for thread in threads: thread.start()
