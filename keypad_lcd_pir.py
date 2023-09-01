@@ -58,8 +58,8 @@ def detect_motion(stop_event):
 
 def evaluate_alarm_threshold(stop_event):
     global consecutive_pir_readings, alarm_start_time, is_armed
-    print(consecutive_pir_readings, alarm_start_time, is_armed)
     while True:
+        print(consecutive_pir_readings, alarm_start_time, is_armed)
         if stop_event.is_set():
             break
         if not is_armed:
