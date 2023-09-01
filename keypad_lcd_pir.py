@@ -132,6 +132,7 @@ try:
 except KeyboardInterrupt:
     program_stop_event.set()
     for thread in threads: thread.join()
+    LCD1602.clear()
     print('bye')
 
 GPIO.cleanup()
