@@ -64,7 +64,7 @@ def evaluate_alarm_threshold(stop_event):
             break
         if not is_armed:
             GPIO.output(BUZZER_PIN, GPIO.HIGH)
-            return
+            continue
         if consecutive_pir_readings >= MOTION_DETECTION_THRESHOLD:
             print('TIME TO SOUND THE ALARM!')
             GPIO.output(BUZZER_PIN, GPIO.LOW)
