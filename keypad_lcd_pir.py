@@ -49,7 +49,7 @@ def detect_motion(stop_event):
         if stop_event.is_set():
             break
         pir_reading = GPIO.input(PIR_PIN)
-        print("pir_reading", pir_reading)
+        # print("pir_reading", pir_reading)
         if pir_reading == 0:
             consecutive_pir_readings = 0
         else:
@@ -57,7 +57,8 @@ def detect_motion(stop_event):
         time.sleep(.1)
 
 def evaluate_alarm_threshold(stop_event):
-    global consecutive_pir_readings, alarm_start_time
+    global consecutive_pir_readings, alarm_start_time, is_armed
+    print(consecutive_pir_readings, alarm_start_time, is_armed)
     while True:
         if stop_event.is_set():
             break
