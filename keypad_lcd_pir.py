@@ -28,7 +28,6 @@ alarm_start_time = 0
 
 def output_to_lcd(line_one, line_two=None):
     """Output a string to the LCD display."""
-    print(line_one, line_two)
     LCD1602.clear()
     LCD1602.write(0, 0, line_one)
     if line_two:
@@ -49,7 +48,6 @@ def detect_motion(stop_event):
         if stop_event.is_set():
             break
         pir_reading = GPIO.input(PIR_PIN)
-        # print("pir_reading", pir_reading)
         if pir_reading == 0:
             consecutive_pir_readings = 0
         else:
@@ -59,7 +57,6 @@ def detect_motion(stop_event):
 def evaluate_alarm_threshold(stop_event):
     global consecutive_pir_readings, alarm_start_time, is_armed
     while True:
-        print(consecutive_pir_readings, alarm_start_time, is_armed)
         if stop_event.is_set():
             break
         if not is_armed:
