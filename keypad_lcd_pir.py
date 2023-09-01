@@ -49,10 +49,12 @@ def detect_motion(stop_event):
         if stop_event.is_set():
             break
         pir_reading = GPIO.input(PIR_PIN)
+        print("pir_reading", pir_reading)
         if pir_reading == 0:
             consecutive_pir_readings = 0
         else:
             consecutive_pir_readings += 1
+        time.sleep(.1)
 
 def evaluate_alarm_threshold(stop_event):
     global consecutive_pir_readings, alarm_start_time
@@ -70,6 +72,7 @@ def evaluate_alarm_threshold(stop_event):
             current_time = time.time()
             if current_time - alarm_start_time > MIN_ALARM_TIME:
                 GPIO.output(BUZZER_PIN, GPIO.HIGH)
+        time.sleep(.1)
 
 def show_brief_message(line_one, line_two=None):
     output_to_lcd(line_one, line_two)
