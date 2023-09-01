@@ -73,6 +73,7 @@ def evaluate_alarm_threshold(stop_event):
             current_time = time.time()
             if current_time - alarm_start_time > MIN_ALARM_TIME:
                 GPIO.output(BUZZER_PIN, GPIO.HIGH)
+                alarm_start_time = 0
         time.sleep(.1)
 
 def show_brief_message(line_one, line_two=None):
