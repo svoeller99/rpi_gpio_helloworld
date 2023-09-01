@@ -28,6 +28,7 @@ alarm_start_time = 0
 
 def output_to_lcd(line_one, line_two=None):
     """Output a string to the LCD display."""
+    print(line_one, line_two)
     LCD1602.clear()
     LCD1602.write(0, 0, line_one)
     if line_two:
@@ -92,9 +93,9 @@ def handle_command():
         passcode = command_string
         show_brief_message('New Passcode: ', passcode)
     elif command_string[0:1] in ['A', 'B', 'C']:
-        show_brief_message('Bad Passcode')
+        show_brief_message('Bad Passcode', command_string)
     else:
-        show_brief_message('Unknown command')
+        show_brief_message('Unknown command: ', command_string)
     prior_command_string = command_string
 
 # initialize LCD display
