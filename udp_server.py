@@ -8,6 +8,14 @@ sock = socket.socket(socket.AF_INET, # IPv4
                      socket.SOCK_DGRAM) # UDP
 sock.bind((UDP_IP, UDP_PORT))
 
+cnt = 0
+
 while True:
     data, addr = sock.recvfrom(BUFFER_SIZE)
-    print("received message from %s: %s" % addr, data)
+    message = data.decode('utf-8')
+    print("received message from client %s: %s" % addr, message)
+    if message == 'INC':
+        cnt += 1
+    if message == 'DEC':
+        cnt -= 1
+    sock.sendto(f'hi there, client - counter is {cnt}'.encode('utf-8'), addr)
