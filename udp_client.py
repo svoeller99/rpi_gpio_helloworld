@@ -1,6 +1,6 @@
 import socket
 
-UDP_IP = '127.0.0.1'
+UDP_IP = 'raspberrypi4wifi'
 UDP_PORT = 5000
 MESSAGE = b"Hello, World!"
 
