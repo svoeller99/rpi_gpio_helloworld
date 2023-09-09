@@ -30,7 +30,7 @@ while True:
             if message == 'TEMP':
                 response_message = f"{fahrenheit: .1f} F"
             elif message == 'HUM':
-                response_message = f"Hum: {dht_reading.humidity: .1f} %"
+                response_message = f"{dht_reading.humidity: .1f} %"
             else:
                 response_message = f"Temp: {fahrenheit: .1f} F. Hum: {dht_reading.humidity: .1f} %"
             sock.sendto(response_message.encode('utf-8'), addr)
