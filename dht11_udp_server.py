@@ -18,15 +18,22 @@ sock.bind((UDP_IP, UDP_PORT))
 GPIO.setmode(GPIO.BCM)
 dht = dht11.DHT11(pin = DHT_PIN)
 
-last_good_reading = ""
-
 while True:
-    dht_reading = dht.read()
-    if dht_reading.is_valid():
-        data, addr = sock.recvfrom(BUFFER_SIZE)
-        celcius = dht_reading.temperature
-        fahrenheit = celcius_to_fahrenheit(celcius)
-        last_good_reading = f"Temp: {fahrenheit: .1f} F. Hum: {dht_reading.humidity: .1f} %"
-        sock.sendto(last_good_reading.encode('utf-8'), addr)
-    else:
-        time.sleep(.2)
+    data, addr = sock.recvfrom(BUFFER_SIZE)
+    message = data.decode('utf-8')
+    while True:
+        dht_reading = dht.read()
+        if dht_reading.is_valid():
+            celcius = dht_reading.temperature
+            fahrenheit = celcius_to_fahrenheit(celcius)
+            response_message = ""
+            if message == 'TEMP':
+                response_message = f"{fahrenheit: .1f} F"
+            elif message == 'HUM':
+                response_message = f"Hum: {dht_reading.humidity: .1f} %"
+            else:
+                response_message = f"Temp: {fahrenheit: .1f} F. Hum: {dht_reading.humidity: .1f} %"
+            sock.sendto(response_message.encode('utf-8'), addr)
+            break
+        else:
+            time.sleep(.2)
