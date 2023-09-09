@@ -14,9 +14,9 @@ RIGHT=1
 LEFT=0
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 360
-RECTANGLE_SIZE = (20, 40)
+RECTANGLE_SIZE = (50, 100)
 RECTANGLE_COLOR=(255,0,255)
-RECTANGLE_THICKNESS=5
+RECTANGLE_THICKNESS=-1 # solid
 MAX_HORIZONTAL_POSITION = SCREEN_WIDTH - RECTANGLE_SIZE[0]
 MAX_VERTICAL_POSITION = SCREEN_HEIGHT - RECTANGLE_SIZE[1]
 
@@ -39,9 +39,9 @@ def recalculate_rectangle_position():
     (horiz_pos, vert_pos) = rectangle_position_start
     (horiz_dir, vert_dir) = rectangle_motion_direction
     if horiz_dir == RIGHT:
-        horiz_pos += 1
+        horiz_pos += 5
     if horiz_dir == LEFT:
-        horiz_pos -= 1
+        horiz_pos -= 5
     if horiz_pos < 0:
         horiz_pos = 0
         horiz_dir = RIGHT
@@ -49,9 +49,9 @@ def recalculate_rectangle_position():
         horiz_pos = MAX_HORIZONTAL_POSITION
         horiz_dir = LEFT
     if vert_dir == UP:
-        vert_pos -=1
+        vert_pos -= 5
     if vert_dir == DOWN:
-        vert_pos += 1
+        vert_pos += 5
     if vert_pos < 0:
         vert_pos = 0
         vert_dir = DOWN
