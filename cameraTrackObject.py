@@ -78,6 +78,9 @@ try:
         if len(contours) > 0:
             contours = sorted(contours, key=lambda contour: cv.contourArea(contour), reverse=True)
             cv.drawContours(frame, contours, 0, (255, 0, 0), 2)
+            largest_contour = contours[0]
+            x,y,w,h = cv.boundingRect(largest_contour)
+            cv.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.imshow("piCam",frame)
