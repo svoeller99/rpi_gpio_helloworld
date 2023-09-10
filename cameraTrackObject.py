@@ -76,7 +76,8 @@ try:
 
         contours, junk = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         if len(contours) > 0:
-            cv.drawContours(frame, contours, -1, (255, 0, 0), 2)
+            contours = sorted(contours, key=lambda contour: cv.contourArea(contour), reverse=True)
+            cv.drawContours(frame, contours, 0, (255, 0, 0), 2)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.imshow("piCam",frame)
