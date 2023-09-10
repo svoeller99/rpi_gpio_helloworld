@@ -34,8 +34,8 @@ def set_hue_low(val):
     global hue_low
     hue_low = val
 def set_hue_high(val):
-    global hugh_high
-    hugh_high = val
+    global hue_high
+    hue_high = val
 def set_sat_low(val):
     global sat_low
     sat_low = val
