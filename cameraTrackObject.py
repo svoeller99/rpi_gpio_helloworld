@@ -67,7 +67,7 @@ try:
         frameHSV=cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
         lower_bound = np.array([hue_low, sat_low, val_low])
-        upper_bound = np.array([hugh_high, sat_high, val_high])
+        upper_bound = np.array([hue_high, sat_high, val_high])
         mask = cv.inRange(frameHSV, lower_bound, upper_bound)
         
         mask_small = cv.resize(mask, (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2)))
