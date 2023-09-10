@@ -51,12 +51,12 @@ def set_val_high(val):
 
 # trackbars
 cv.namedWindow('trackbars')
-cv.createTrackbar('Hue low', 'trackbars', 0, 255, set_hue_low)
-cv.createTrackbar('Hue high', 'trackbars', 0, 255, set_hue_high)
-cv.createTrackbar('Sat low', 'trackbars', 0, 255, set_sat_low)
-cv.createTrackbar('Sat high', 'trackbars', 0, 255, set_sat_high)
-cv.createTrackbar('Val low', 'trackbars', 0, 255, set_val_low)
-cv.createTrackbar('Val high', 'trackbars', 0, 255, set_val_high)
+cv.createTrackbar('Hue low', 'trackbars', hue_low, 255, set_hue_low)
+cv.createTrackbar('Hue high', 'trackbars', hue_high, 255, set_hue_high)
+cv.createTrackbar('Sat low', 'trackbars', sat_low, 255, set_sat_low)
+cv.createTrackbar('Sat high', 'trackbars', sat_high, 255, set_sat_high)
+cv.createTrackbar('Val low', 'trackbars', val_low, 255, set_val_low)
+cv.createTrackbar('Val high', 'trackbars', val_high, 255, set_val_high)
 
 try:
 
