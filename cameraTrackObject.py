@@ -22,11 +22,11 @@ piCam.start()
 
 # state
 fps=30
-hue_low = 0
-hue_high = 255
-sat_low = 0
+hue_low = 20
+hue_high = 30
+sat_low = 100
 sat_high = 255
-val_low = 0
+val_low = 100
 val_high = 255
 
 # capture trackbar values
