@@ -71,7 +71,7 @@ try:
         mask = cv.inRange(frameHSV, lower_bound, upper_bound)
         
         mask_small = cv.resize(mask, (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2)))
-        frame_small = cv.resize(frame, (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2)))
+        frame_small = cv.resize(frameHSV, (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2)))
         object_of_interest = cv.bitwise_and(frame_small, frame_small, mask=mask_small)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
