@@ -67,6 +67,7 @@ pan_tilt = PanTilt()
 pan_tilt.start()
 
 def adjust_camera_position_async(object_of_interest_start, object_of_interest_end):
+    print('running async camera adjust')
     Thread(target=adjust_camera_position, args=[object_of_interest_start, object_of_interest_end]).run()
 
 def adjust_camera_position(object_of_interest_start, object_of_interest_end):
