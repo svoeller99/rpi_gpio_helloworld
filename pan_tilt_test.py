@@ -45,9 +45,9 @@ def test_tilt(tilt_pwm, gradually_change_duty_cycle):
         gradually_change_duty_cycle(tilt_pwm, 120, 90) #center
         time.sleep(1)
 
-test_tilt(tilt_pwm, gradually_change_duty_cycle)
+# test_tilt(tilt_pwm, gradually_change_duty_cycle)
 
-# test_pan(pan_pwm, gradually_change_duty_cycle)
+test_pan(pan_pwm, gradually_change_duty_cycle)
 
 tilt_pwm.ChangeDutyCycle(0)
 pan_pwm.ChangeDutyCycle(0)
