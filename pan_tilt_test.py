@@ -46,5 +46,5 @@ for ii in range(0,2):
 tilt_pwm.ChangeDutyCycle(0)
 pan_pwm.ChangeDutyCycle(0)
 tilt_pwm.stop()
-pan_pwm.ChangeDutyCycle(0)
+pan_pwm.stop()
 GPIO.cleanup()
