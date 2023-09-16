@@ -9,7 +9,7 @@ PAN_PIN_DEFAULT = 12
 TILT_PIN_DEFAULT = 13
 
 class PanTilt:
-    def __init__(self, pan_pin=PAN_PIN_DEFAULT, tilt_pin=TILT_PIN_DEFAULT, change_mode=GRADUAL):
+    def __init__(self, pan_pin=PAN_PIN_DEFAULT, tilt_pin=TILT_PIN_DEFAULT, change_mode=SUDDEN):
         self.pan_pin = pan_pin
         self.tilt_pin = tilt_pin
         self.change_mode = change_mode
