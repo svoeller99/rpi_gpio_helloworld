@@ -53,7 +53,7 @@ def test_tilt(tilt_pwm, change_degrees):
 
 test_tilt(tilt_pwm, change_degrees)
 
-# test_pan(pan_pwm, change_degrees)
+test_pan(pan_pwm, change_degrees)
 
 tilt_pwm.ChangeDutyCycle(0)
 pan_pwm.ChangeDutyCycle(0)
