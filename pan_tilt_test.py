@@ -7,7 +7,6 @@ pan_pin = 12
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(tilt_pin, GPIO.OUT)
 GPIO.setup(pan_pin, GPIO.OUT)
-
 tilt_pwm = GPIO.PWM(tilt_pin, 50) # 50 Hz (20 ms PWM period)
 pan_pwm = GPIO.PWM(pan_pin, 50)
 
