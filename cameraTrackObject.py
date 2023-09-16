@@ -105,10 +105,9 @@ cv.createTrackbar('Val low', 'trackbars', val_low, 255, set_val_low)
 cv.createTrackbar('Val high', 'trackbars', val_high, 255, set_val_high)
 
 try:
-
+    last_camera_adjust_time = time.time()
     while True:
         tStart=time.time()
-        last_camera_adjust_time = time.time()
 
         frame=piCam.capture_array()
         frameHSV=cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -134,7 +133,6 @@ try:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 # print(f"object of interest area: {object_of_interest_area}")
                 now = time.time()
-                print(now - last_camera_adjust_time)
                 if now - last_camera_adjust_time > 2: # wait 2 seconds between camera adjustments - TODO: constant
                     last_camera_adjust_time = now
                     adjust_camera_position_async(object_of_interest_start, object_of_interest_end)
