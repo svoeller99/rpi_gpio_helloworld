@@ -23,7 +23,7 @@ def change_degrees(pwm, prior_degrees, new_degrees):
     gradually_change_degrees(pwm, prior_degrees, new_degrees)
 
 def gradually_change_degrees(pwm, prior_degrees, new_degrees):
-    increments = 10
+    increments = 100
     degrees_increment = abs(new_degrees - prior_degrees) / increments
     if new_degrees < prior_degrees:
         degrees_increment *= -1
@@ -32,9 +32,9 @@ def gradually_change_degrees(pwm, prior_degrees, new_degrees):
     while (degrees_increment > 0 and current_degrees < new_degrees) or (degrees_increment < 0 and current_degrees > new_degrees):
         current_degrees += degrees_increment
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
-        time.sleep(0.2)
-        pwm.ChangeDutyCycle(0)
-        time.sleep(0.2)
+        time.sleep(0.01)
+    pwm.ChangeDutyCycle(0)
+    time.sleep(.2)
 
 def suddenly_change_degrees(pwm, new_degrees):
     pwm.ChangeDutyCycle(degrees_to_duty_cycle(new_degrees))
