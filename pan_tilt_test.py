@@ -22,11 +22,18 @@ def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
         degrees_increment *= -1
     print(f"Changing from {prior_degrees} to {new_degrees} degrees. Increment: {degrees_increment}")
     current_degrees = prior_degrees
-    while (degrees_increment > 0 and current_degrees < new_degrees) or (degrees_increment < 0 and current_degrees < new_degrees):
-        current_degrees += degrees_increment
-        print(current_degrees)
-        pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
-        time.sleep(.05)
+    if degrees_increment > 0:
+        while current_degrees < new_degrees:
+            current_degrees += degrees_increment
+            print(current_degrees)
+            pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
+            time.sleep(.05)
+    if degrees_increment < 0:
+        while current_degrees < new_degrees:
+            current_degrees += degrees_increment
+            print(current_degrees)
+            pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
+            time.sleep(.05)
 
 for ii in range(0,3):
     gradually_change_duty_cycle(tilt_pwm, 90, 30)
