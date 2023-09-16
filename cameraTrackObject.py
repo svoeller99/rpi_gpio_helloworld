@@ -133,7 +133,7 @@ try:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 # print(f"object of interest area: {object_of_interest_area}")
                 now = time.time()
-                if now - last_camera_adjust_time > 2: # wait 2 seconds between camera adjustments - TODO: constant
+                if now - last_camera_adjust_time > 1: # wait 1 seconds between camera adjustments - TODO: constant
                     last_camera_adjust_time = now
                     adjust_camera_position_async(object_of_interest_start, object_of_interest_end)
         
