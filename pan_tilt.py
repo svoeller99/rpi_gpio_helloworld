@@ -26,10 +26,10 @@ class PanTilt:
         self.pan_pwm.stop()
     
     def set_pan(self, pan_degrees):
-        self._change_degrees(self.pan_pin, pan_degrees)
+        self._change_degrees(self.pan_pin, PanTilt._normalize_degrees(pan_degrees))
 
     def set_tilt(self, tilt_degrees):
-        self._change_degrees(self.tilt_pin, tilt_degrees)
+        self._change_degrees(self.tilt_pin, PanTilt._normalize_degrees(tilt_degrees))
 
     def _change_degrees(self, pin, degrees):
         if self.change_mode == SUDDEN:
@@ -78,6 +78,14 @@ class PanTilt:
         pwm.ChangeDutyCycle(duty_cycle)
         time.sleep(0.2) # wait for motion to complete
         pwm.ChangeDutyCycle(0) # turn off servo
+    
+    @staticmethod
+    def _normalize_degrees(degrees):
+        if degrees < 0:
+            degrees = 0
+        if degrees > 180:
+            degrees = 180
+        return degrees
 
 
 if __name__ == '__main__':
