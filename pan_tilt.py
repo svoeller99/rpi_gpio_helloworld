@@ -71,6 +71,8 @@ class PanTilt:
         GPIO.setup(pin, GPIO.OUT)
         pwm = GPIO.PWM(pin, 50) # 50 Hz (20 ms PWM period)
         pwm.start(degrees_to_duty_cycle(90))
+        time.sleep(.2)
+        pwm.ChangeDutyCycle(0)
         self.degrees_by_pin.update(dict([(pin, 90)]))
         return pwm
 
