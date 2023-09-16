@@ -101,7 +101,7 @@ try:
             object_of_interest_area = w * h
             if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
-                print(f"object of interest area: {object_of_interest_area}")
+                # print(f"object of interest area: {object_of_interest_area}")
 
                 # determine if we need to adjust tilt/pan to bring object of interest into frame    
                 above_bounding_rectangle = object_of_interest_start[1] < CAMERA_FOCUS_RECTANGLE_START[1]
