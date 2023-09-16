@@ -16,6 +16,7 @@ pan_pwm.start(7.0)
 time.sleep(.5)
 
 def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
+    print(f"Changing from {prior_degrees} to {new_degrees} degrees")
     increments = 10
     degrees_increment = abs(new_degrees - prior_degrees) / increments
     if new_degrees < prior_degrees:
