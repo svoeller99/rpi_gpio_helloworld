@@ -101,6 +101,7 @@ if __name__ == '__main__':
         pan_tilt.set_pan(120)
         time.sleep(1)
         pan_tilt.set_pan(90)
+        time.sleep(1)
 
     # test tilt
     for ii in range(0,2):
@@ -109,6 +110,7 @@ if __name__ == '__main__':
         pan_tilt.set_tilt(120)
         time.sleep(1)
         pan_tilt.set_tilt(90)
+        time.sleep(1)
 
     pan_tilt.stop()
     GPIO.cleanup()
