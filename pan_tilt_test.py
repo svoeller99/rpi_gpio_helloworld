@@ -15,7 +15,10 @@ tilt_pwm.start(7.0) # set duty cycle to achieve 90 degrees (0 degrees is 2.0, 18
 # pan_pwm.start(7.0)
 time.sleep(.5)
 
-def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
+def change_degrees(pwm, prior_degrees, new_degrees):
+    suddenly_change_degrees(pwm, new_degrees)
+
+def gradually_change_degrees(pwm, prior_degrees, new_degrees):
     increments = 100
     degrees_increment = abs(new_degrees - prior_degrees) / increments
     if new_degrees < prior_degrees:
@@ -27,27 +30,30 @@ def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
         time.sleep(.015)
 
-def test_pan(pan_pwm, gradually_change_duty_cycle):
+def suddenly_change_degrees(pwm, new_degrees):
+    pwm.ChangeDutyCycle(degrees_to_duty_cycle(new_degrees))
+
+def test_pan(pan_pwm, change_degrees):
     for ii in range(0,2):
-        gradually_change_duty_cycle(pan_pwm, 90, 30) #left
+        change_degrees(pan_pwm, 90, 30) #left
         time.sleep(1)
-        gradually_change_duty_cycle(pan_pwm, 30, 120) #right
+        change_degrees(pan_pwm, 30, 120) #right
         time.sleep(1)
-        gradually_change_duty_cycle(pan_pwm, 120, 90) #center
+        change_degrees(pan_pwm, 120, 90) #center
         time.sleep(1)
 
-def test_tilt(tilt_pwm, gradually_change_duty_cycle):
+def test_tilt(tilt_pwm, change_degrees):
     for ii in range(0,2):
-        gradually_change_duty_cycle(tilt_pwm, 90, 30) #up 
+        change_degrees(tilt_pwm, 90, 30) #up 
         time.sleep(1)
-        gradually_change_duty_cycle(tilt_pwm, 30, 120) #down
+        change_degrees(tilt_pwm, 30, 120) #down
         time.sleep(1)
-        gradually_change_duty_cycle(tilt_pwm, 120, 90) #center
+        change_degrees(tilt_pwm, 120, 90) #center
         time.sleep(1)
 
-test_tilt(tilt_pwm, gradually_change_duty_cycle)
+test_tilt(tilt_pwm, change_degrees)
 
-# test_pan(pan_pwm, gradually_change_duty_cycle)
+# test_pan(pan_pwm, change_degrees)
 
 tilt_pwm.ChangeDutyCycle(0)
 # pan_pwm.ChangeDutyCycle(0)
