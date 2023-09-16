@@ -14,6 +14,7 @@ FPS_FONT_COLOR = (255,0,0)
 FPS_THICKNESS = 3
 SCREEN_WIDTH = 864
 SCREEN_HEIGHT = 468
+OBJECT_OF_INTEREST_MIN_AREA = 5000
 
 # rectangle that we'll try to keep our object of interest in
 CAMERA_FOCUS_RECTANGLE_START = (200, 100)
@@ -98,12 +99,12 @@ try:
             object_of_interest_start = (x, y)
             object_of_interest_end = (x + w, y + h)
             object_of_interest_area = w * h
-            cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
-            print(f"object of interest area: {object_of_interest_area}")
+            if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA
+                cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
+                print(f"object of interest area: {object_of_interest_area}")
 
-            # determine if we need to adjust tilt/pan to bring object of interest into frame
-            
-            # TODO
+                # determine if we need to adjust tilt/pan to bring object of interest into frame    
+                # TODO
             
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
