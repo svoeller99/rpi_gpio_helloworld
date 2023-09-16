@@ -23,7 +23,7 @@ def change_degrees(pwm, prior_degrees, new_degrees):
     gradually_change_degrees(pwm, prior_degrees, new_degrees)
 
 def gradually_change_degrees(pwm, prior_degrees, new_degrees):
-    increments = 100
+    increments = 10
     degrees_increment = abs(new_degrees - prior_degrees) / increments
     if new_degrees < prior_degrees:
         degrees_increment *= -1
