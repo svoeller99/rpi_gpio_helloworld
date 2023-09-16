@@ -24,8 +24,7 @@ MAX_VERTICAL_POSITION = SCREEN_HEIGHT - RECTANGLE_SIZE[1]
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 piCam.preview_configuration.main.format="RGB888"
-piCam.preview_configuration.main.transform.hflip=1
-piCam.preview_configuration.main.transform.vflip=1
+piCam.preview_configuration.main.transform = Transform(hflip=1, vflip=1)
 piCam.preview_configuration.controls.FrameRate=30
 piCam.preview_configuration.align()
 piCam.configure("preview")
