@@ -124,13 +124,13 @@ try:
                 if vert_adjust_degrees != 0:
                     pan_tilt.adjust_tilt(vert_adjust_degrees)
                 if horiz_adjust_degrees != 0:
-                    pan_tilt.adjust_tilt(horiz_adjust_degrees)
+                    pan_tilt.adjust_pan(horiz_adjust_degrees)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.rectangle(frame, CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, CAMERA_FOCUS_RECTANGLE_COLOR, CAMERA_FOCUS_RECTANGLE_THICKNESS)
         cv.imshow("piCam",frame)
-        cv.imshow('mask', mask_small)
-        cv.imshow('Object of interest', object_of_interest)
+        # cv.imshow('mask', mask_small)
+        # cv.imshow('Object of interest', object_of_interest)
         if cv.waitKey(1) == ord('q'):
             break
         tEnd=time.time()
