@@ -96,20 +96,20 @@ if __name__ == '__main__':
     
     # test pan
     for ii in range(0,2):
-        pan_tilt.set_pan(30)
+        pan_tilt.set_pan(30) # right
         time.sleep(1)
-        pan_tilt.set_pan(120)
+        pan_tilt.set_pan(120) # left
         time.sleep(1)
-        pan_tilt.set_pan(90)
+        pan_tilt.set_pan(90) # center
         time.sleep(1)
 
     # test tilt
     for ii in range(0,2):
-        pan_tilt.set_tilt(30)
+        pan_tilt.set_tilt(30) # up
         time.sleep(1)
-        pan_tilt.set_tilt(120)
+        pan_tilt.set_tilt(120) # down
         time.sleep(1)
-        pan_tilt.set_tilt(90)
+        pan_tilt.set_tilt(90) # center
         time.sleep(1)
 
     pan_tilt.stop()
