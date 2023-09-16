@@ -104,7 +104,11 @@ try:
                 print(f"object of interest area: {object_of_interest_area}")
 
                 # determine if we need to adjust tilt/pan to bring object of interest into frame    
-                # TODO
+                above_bounding_rectangle = object_of_interest_start[0] < CAMERA_FOCUS_RECTANGLE_START[0]
+                below_bounding_rectangle = object_of_interest_end[0] > CAMERA_FOCUS_RECTANGLE_END[0]
+                left_of_bounding_rectangle = object_of_interest_start[1] < CAMERA_FOCUS_RECTANGLE_START[1]
+                right_of_bounding_rectangle = object_of_interest_end[1] > CAMERA_FOCUS_RECTANGLE_END[1]
+                print(f"above={above_bounding_rectangle} below={below_bounding_rectangle} left={left_of_bounding_rectangle} right={right_of_bounding_rectangle}")
             
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
