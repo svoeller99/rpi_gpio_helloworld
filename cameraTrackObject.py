@@ -99,7 +99,7 @@ try:
             object_of_interest_start = (x, y)
             object_of_interest_end = (x + w, y + h)
             object_of_interest_area = w * h
-            if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA
+            if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 print(f"object of interest area: {object_of_interest_area}")
 
