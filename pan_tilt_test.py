@@ -36,16 +36,18 @@ def test_pan(pan_pwm, gradually_change_duty_cycle):
         gradually_change_duty_cycle(pan_pwm, 120, 90) #center
         time.sleep(1)
 
-for ii in range(0,2):
-    gradually_change_duty_cycle(tilt_pwm, 90, 30) #up 
-    time.sleep(1)
-    test_pan(pan_pwm, gradually_change_duty_cycle)
-    gradually_change_duty_cycle(tilt_pwm, 30, 120) #down
-    time.sleep(1)
-    test_pan(pan_pwm, gradually_change_duty_cycle)
-    gradually_change_duty_cycle(tilt_pwm, 120, 90) #center
-    time.sleep(1)
-    test_pan(pan_pwm, gradually_change_duty_cycle)
+def test_tilt(tilt_pwm, gradually_change_duty_cycle):
+    for ii in range(0,2):
+        gradually_change_duty_cycle(tilt_pwm, 90, 30) #up 
+        time.sleep(1)
+        gradually_change_duty_cycle(tilt_pwm, 30, 120) #down
+        time.sleep(1)
+        gradually_change_duty_cycle(tilt_pwm, 120, 90) #center
+        time.sleep(1)
+
+test_tilt(tilt_pwm, gradually_change_duty_cycle)
+
+# test_pan(pan_pwm, gradually_change_duty_cycle)
 
 tilt_pwm.ChangeDutyCycle(0)
 pan_pwm.ChangeDutyCycle(0)
