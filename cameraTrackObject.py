@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import time
 from picamera2 import Picamera2
 from libcamera import Transform
+from threading import Thread
 from pan_tilt import PanTilt
 
 # consts
@@ -65,6 +66,34 @@ GPIO.setmode(GPIO.BCM)
 pan_tilt = PanTilt()
 pan_tilt.start()
 
+def adjust_camera_position_async(object_of_interest_start, object_of_interest_end):
+    Thread(target=adjust_camera_position, args=[object_of_interest_start, object_of_interest_end]).run()
+
+def adjust_camera_position(object_of_interest_start, object_of_interest_end):
+    global CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, pan_tilt
+    # TODO: move this into a worker thread to avoid interrupting video
+    # determine if we need to adjust tilt/pan to bring object of interest into frame    
+    above_bounding_rectangle = object_of_interest_start[1] < CAMERA_FOCUS_RECTANGLE_START[1]
+    below_bounding_rectangle = object_of_interest_end[1] > CAMERA_FOCUS_RECTANGLE_END[1]
+    left_of_bounding_rectangle = object_of_interest_start[0] < CAMERA_FOCUS_RECTANGLE_START[0]
+    right_of_bounding_rectangle = object_of_interest_end[0] > CAMERA_FOCUS_RECTANGLE_END[0]
+    print(f"above={above_bounding_rectangle} below={below_bounding_rectangle} left={left_of_bounding_rectangle} right={right_of_bounding_rectangle}")
+
+    vert_adjust_degrees = 0
+    horiz_adjust_degrees = 0
+    if above_bounding_rectangle and not below_bounding_rectangle:
+        vert_adjust_degrees = -5
+    if not above_bounding_rectangle and below_bounding_rectangle:
+        vert_adjust_degrees = 5
+    if right_of_bounding_rectangle and not left_of_bounding_rectangle:
+        horiz_adjust_degrees = -5
+    if not right_of_bounding_rectangle and left_of_bounding_rectangle:
+        horiz_adjust_degrees = 5
+    if vert_adjust_degrees != 0:
+        pan_tilt.adjust_tilt(vert_adjust_degrees)
+    if horiz_adjust_degrees != 0:
+        pan_tilt.adjust_pan(horiz_adjust_degrees)
+
 # trackbars
 cv.namedWindow('trackbars')
 cv.createTrackbar('Hue low', 'trackbars', hue_low, 255, set_hue_low)
@@ -78,6 +107,7 @@ try:
 
     while True:
         tStart=time.time()
+        last_camera_adjust_time = time.time()
 
         frame=piCam.capture_array()
         frameHSV=cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -102,29 +132,10 @@ try:
             if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 # print(f"object of interest area: {object_of_interest_area}")
-
-                # TODO: move this into a worker thread to avoid interrupting video
-                # determine if we need to adjust tilt/pan to bring object of interest into frame    
-                above_bounding_rectangle = object_of_interest_start[1] < CAMERA_FOCUS_RECTANGLE_START[1]
-                below_bounding_rectangle = object_of_interest_end[1] > CAMERA_FOCUS_RECTANGLE_END[1]
-                left_of_bounding_rectangle = object_of_interest_start[0] < CAMERA_FOCUS_RECTANGLE_START[0]
-                right_of_bounding_rectangle = object_of_interest_end[0] > CAMERA_FOCUS_RECTANGLE_END[0]
-                print(f"above={above_bounding_rectangle} below={below_bounding_rectangle} left={left_of_bounding_rectangle} right={right_of_bounding_rectangle}")
-
-                vert_adjust_degrees = 0
-                horiz_adjust_degrees = 0
-                if above_bounding_rectangle and not below_bounding_rectangle:
-                    vert_adjust_degrees = -5
-                if not above_bounding_rectangle and below_bounding_rectangle:
-                    vert_adjust_degrees = 5
-                if right_of_bounding_rectangle and not left_of_bounding_rectangle:
-                    horiz_adjust_degrees = -5
-                if not right_of_bounding_rectangle and left_of_bounding_rectangle:
-                    horiz_adjust_degrees = 5
-                if vert_adjust_degrees != 0:
-                    pan_tilt.adjust_tilt(vert_adjust_degrees)
-                if horiz_adjust_degrees != 0:
-                    pan_tilt.adjust_pan(horiz_adjust_degrees)
+                now = time.time()
+                if now - last_camera_adjust_time > 2: # wait 2 seconds between camera adjustments - TODO: constant
+                    last_camera_adjust_time = now
+                    adjust_camera_position_async(object_of_interest_start, object_of_interest_end)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.rectangle(frame, CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, CAMERA_FOCUS_RECTANGLE_COLOR, CAMERA_FOCUS_RECTANGLE_THICKNESS)
