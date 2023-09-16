@@ -27,21 +27,25 @@ def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
         time.sleep(.015)
 
-for ii in range(0,2):
-    gradually_change_duty_cycle(tilt_pwm, 90, 30)
-    time.sleep(1)
-    gradually_change_duty_cycle(tilt_pwm, 30, 120)
-    time.sleep(1)
-    gradually_change_duty_cycle(tilt_pwm, 120, 90)
-    time.sleep(1)
+def test_pan(pan_pwm, gradually_change_duty_cycle):
+    for ii in range(0,2):
+        gradually_change_duty_cycle(pan_pwm, 90, 30) #left
+        time.sleep(1)
+        gradually_change_duty_cycle(pan_pwm, 30, 120) #right
+        time.sleep(1)
+        gradually_change_duty_cycle(pan_pwm, 120, 90) #center
+        time.sleep(1)
 
 for ii in range(0,2):
-    gradually_change_duty_cycle(pan_pwm, 90, 30)
+    gradually_change_duty_cycle(tilt_pwm, 90, 30) #up 
     time.sleep(1)
-    gradually_change_duty_cycle(pan_pwm, 30, 120)
+    test_pan(pan_pwm, gradually_change_duty_cycle)
+    gradually_change_duty_cycle(tilt_pwm, 30, 120) #down
     time.sleep(1)
-    gradually_change_duty_cycle(pan_pwm, 120, 90)
+    test_pan(pan_pwm, gradually_change_duty_cycle)
+    gradually_change_duty_cycle(tilt_pwm, 120, 90) #center
     time.sleep(1)
+    test_pan(pan_pwm, gradually_change_duty_cycle)
 
 tilt_pwm.ChangeDutyCycle(0)
 pan_pwm.ChangeDutyCycle(0)
