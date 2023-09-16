@@ -1,7 +1,10 @@
 import cv2 as cv
 import numpy as np
-from picamera2 import Picamera2
+import RPi.GPIO as GPIO
 import time
+from picamera2 import Picamera2
+from libcamera import Transform
+from pan_tilt import PanTilt
 
 # consts
 FPS_POSITION = (30,60)
@@ -9,12 +12,16 @@ FPS_FONT = cv.FONT_HERSHEY_SIMPLEX
 FPS_FONT_SCALE = 1.5
 FPS_FONT_COLOR = (255,0,0)
 FPS_THICKNESS = 3
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 360
+SCREEN_WIDTH = 864
+SCREEN_HEIGHT = 468
+
+CAMERA_FOCUS_RECTANGLE_COLOR=(0,255,0)
+CAMERA_FOCUS_RECTANGLE_THICKNESS=1
 
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 piCam.preview_configuration.main.format="RGB888"
+piCam.preview_configuration.transform = Transform(hflip=0, vflip=1)
 piCam.preview_configuration.controls.FrameRate=30
 piCam.preview_configuration.align()
 piCam.configure("preview")
@@ -22,6 +29,7 @@ piCam.start()
 
 # state
 fps=30
+# look for yellow bottlecap by default
 hue_low = 20
 hue_high = 30
 sat_low = 100
@@ -48,6 +56,10 @@ def set_val_low(val):
 def set_val_high(val):
     global val_high
     val_high = val
+
+GPIO.setmode(GPIO.BCM)
+pan_tilt = PanTilt()
+pan_tilt.start()
 
 # trackbars
 cv.namedWindow('trackbars')
@@ -83,6 +95,7 @@ try:
             cv.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
+        cv.rectangle(frame, (100, 100), (SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100), CAMERA_FOCUS_RECTANGLE_COLOR, CAMERA_FOCUS_RECTANGLE_THICKNESS)
         cv.imshow("piCam",frame)
         cv.imshow('mask', mask_small)
         cv.imshow('Object of interest', object_of_interest)
@@ -97,3 +110,5 @@ except KeyboardInterrupt:
     print('bye')
 
 cv.destroyAllWindows()
+pan_tilt.stop()
+GPIO.cleanup()
