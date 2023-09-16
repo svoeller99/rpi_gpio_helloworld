@@ -28,10 +28,14 @@ def gradually_change_degrees(pwm, prior_degrees, new_degrees):
     while (degrees_increment > 0 and current_degrees < new_degrees) or (degrees_increment < 0 and current_degrees > new_degrees):
         current_degrees += degrees_increment
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
+        time.sleep(0.001)
+        pwm.ChangeDutyCycle(0)
         time.sleep(.015)
 
 def suddenly_change_degrees(pwm, new_degrees):
     pwm.ChangeDutyCycle(degrees_to_duty_cycle(new_degrees))
+    time.sleep(0.001)
+    pwm.ChangeDutyCycle(0)
 
 def test_pan(pan_pwm, change_degrees):
     for ii in range(0,2):
