@@ -23,6 +23,7 @@ def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
     current_degrees = prior_degrees
     while current_degrees < new_degrees:
         current_degrees += degrees_increment
+        print(current_degrees)
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
         time.sleep(.05)
 
