@@ -9,7 +9,7 @@ PAN_PIN_DEFAULT = 12
 TILT_PIN_DEFAULT = 13
 
 class PanTilt:
-    def __init__(self, pan_pin=PAN_PIN_DEFAULT, tilt_pin=TILT_PIN_DEFAULT, change_mode=SUDDEN):
+    def __init__(self, pan_pin=PAN_PIN_DEFAULT, tilt_pin=TILT_PIN_DEFAULT, change_mode=GRADUAL):
         self.pan_pin = pan_pin
         self.tilt_pin = tilt_pin
         self.change_mode = change_mode
@@ -37,6 +37,7 @@ class PanTilt:
         else:
             self._gradually_change_degrees(pin, degrees)
         self.degrees_by_pin.update(dict([(pin, degrees)]))
+        print(self.degrees_by_pin)
 
     def _gradually_change_degrees(self, pin, degrees):
         increments = 100
