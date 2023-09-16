@@ -19,7 +19,8 @@ pan_pwm.ChangeDutyCycle(0)
 time.sleep(.5)
 
 def change_degrees(pwm, prior_degrees, new_degrees):
-    suddenly_change_degrees(pwm, new_degrees)
+    # suddenly_change_degrees(pwm, new_degrees)
+    gradually_change_degrees(pwm, prior_degrees, new_degrees)
 
 def gradually_change_degrees(pwm, prior_degrees, new_degrees):
     increments = 100
@@ -33,7 +34,7 @@ def gradually_change_degrees(pwm, prior_degrees, new_degrees):
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
         time.sleep(0.2)
         pwm.ChangeDutyCycle(0)
-        time.sleep(.2)
+        time.sleep(0.2)
 
 def suddenly_change_degrees(pwm, new_degrees):
     pwm.ChangeDutyCycle(degrees_to_duty_cycle(new_degrees))
