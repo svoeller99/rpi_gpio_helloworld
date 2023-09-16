@@ -26,12 +26,21 @@ class PanTilt:
         self.pan_pwm.stop()
     
     def set_pan(self, pan_degrees):
-        self._change_degrees(self.pan_pin, PanTilt._normalize_degrees(pan_degrees))
+        self._change_degrees(self.pan_pin, pan_degrees)
 
     def set_tilt(self, tilt_degrees):
-        self._change_degrees(self.tilt_pin, PanTilt._normalize_degrees(tilt_degrees))
+        self._change_degrees(self.tilt_pin, tilt_degrees)
+
+    def adjust_pan(self, degree_adjustment):
+        pan_degrees = self.degrees_by_pin.get(self.pan_pin)
+        self.set_pan(pan_degrees + degree_adjustment)
+    
+    def adjust_tilt(self, degree_adjustment):
+        tilt_degrees = self.degrees_by_pin.get(self.tilt_pin)
+        self.set_tilt(tilt_degrees + degree_adjustment)
 
     def _change_degrees(self, pin, degrees):
+        degrees = PanTilt._normalize_degrees(degrees)
         if self.change_mode == SUDDEN:
             self._suddenly_change_degrees(pin, degrees)
         else:
@@ -98,9 +107,9 @@ if __name__ == '__main__':
     
     # test pan
     for ii in range(0,2):
-        pan_tilt.set_pan(30) # right
+        pan_tilt.set_pan(30) # left
         time.sleep(1)
-        pan_tilt.set_pan(120) # left
+        pan_tilt.set_pan(120) # right
         time.sleep(1)
         pan_tilt.set_pan(90) # center
         time.sleep(1)
