@@ -16,7 +16,7 @@ tilt_pwm.start(7.0) # set duty cycle to achieve 90 degrees (0 degrees is 2.0, 18
 time.sleep(.5)
 
 def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
-    increments = 10
+    increments = 100
     degrees_increment = abs(new_degrees - prior_degrees) / increments
     if new_degrees < prior_degrees:
         degrees_increment *= -1
@@ -26,7 +26,7 @@ def gradually_change_duty_cycle(pwm, prior_degrees, new_degrees):
         current_degrees += degrees_increment
         print(current_degrees)
         pwm.ChangeDutyCycle(degrees_to_duty_cycle(current_degrees))
-        time.sleep(.05)
+        time.sleep(.005)
 
 for ii in range(0,3):
     gradually_change_duty_cycle(tilt_pwm, 90, 30)
