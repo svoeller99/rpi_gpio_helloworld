@@ -86,9 +86,9 @@ def adjust_camera_position(object_of_interest_start, object_of_interest_end):
         vert_adjust_degrees = -5
     if not above_bounding_rectangle and below_bounding_rectangle:
         vert_adjust_degrees = 5
-    if right_of_bounding_rectangle and not left_of_bounding_rectangle:
-        horiz_adjust_degrees = -5
     if not right_of_bounding_rectangle and left_of_bounding_rectangle:
+        horiz_adjust_degrees = -5
+    if right_of_bounding_rectangle and not left_of_bounding_rectangle:
         horiz_adjust_degrees = 5
     if vert_adjust_degrees != 0:
         pan_tilt.adjust_tilt(vert_adjust_degrees)
