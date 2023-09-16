@@ -15,6 +15,9 @@ FPS_THICKNESS = 3
 SCREEN_WIDTH = 864
 SCREEN_HEIGHT = 468
 
+# rectangle that we'll try to keep our object of interest in
+CAMERA_FOCUS_RECTANGLE_START = (200, 200)
+CAMERA_FOCUS_RECTANGLE_END = (SCREEN_WIDTH - 200, SCREEN_HEIGHT - 200)
 CAMERA_FOCUS_RECTANGLE_COLOR=(0,255,0)
 CAMERA_FOCUS_RECTANGLE_THICKNESS=1
 
@@ -92,10 +95,16 @@ try:
             cv.drawContours(frame, contours, 0, (255, 0, 0), 2)
             largest_contour = contours[0]
             x,y,w,h = cv.boundingRect(largest_contour)
-            cv.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
+            object_of_interest_start = (x, y)
+            object_of_interest_end = (x + w, y + h)
+            cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
+
+            # determine if we need to adjust tilt/pan to bring object of interest into frame
+            # TODO
+            
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
-        cv.rectangle(frame, (100, 100), (SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100), CAMERA_FOCUS_RECTANGLE_COLOR, CAMERA_FOCUS_RECTANGLE_THICKNESS)
+        cv.rectangle(frame, CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, CAMERA_FOCUS_RECTANGLE_COLOR, CAMERA_FOCUS_RECTANGLE_THICKNESS)
         cv.imshow("piCam",frame)
         cv.imshow('mask', mask_small)
         cv.imshow('Object of interest', object_of_interest)
