@@ -92,6 +92,7 @@ def adjust_camera_position(object_of_interest_center):
             pan_tilt.adjust_pan(horiz_adjust_degrees)
     finally:
         adjust_lock.release()
+    time.sleep(.1)
 
 # trackbars
 cv.namedWindow('trackbars')
