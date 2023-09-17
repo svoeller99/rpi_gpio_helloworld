@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 import time
 from picamera2 import Picamera2
 from libcamera import Transform
-from threading import Thread
+from threading import Thread, Lock
 from pan_tilt import PanTilt
 
 # consts
@@ -18,7 +18,7 @@ SCREEN_HEIGHT = 468
 SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
 OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
-ADJUST_DEGREES_INCREMENT = 1
+ADJUST_DEGREES_PER_PIXEL = 40 # TODO: tune this
 ADJUST_INTERVAL_SECONDS = .25
 MODE_TRACK = 0
 MODE_TRAIN = 1
@@ -67,6 +67,7 @@ def set_program_mode(val):
     program_mode = val
 
 GPIO.setmode(GPIO.BCM)
+adjust_lock = Lock()
 pan_tilt = PanTilt()
 pan_tilt.start()
 
@@ -75,28 +76,40 @@ def adjust_camera_position_async(object_of_interest_center):
     Thread(target=adjust_camera_position, args=[object_of_interest_center]).run()
 
 def adjust_camera_position(object_of_interest_center):
-    global CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, pan_tilt
-    horiz_delta = SCREEN_CENTER[0] - object_of_interest_center[0]
-    vert_delta = SCREEN_CENTER[1] - object_of_interest_center[1]
+    global CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, pan_tilt, adjust_lock
     
-    vert_adjust_degrees = 0
-    horiz_adjust_degrees = 0
-    if abs(horiz_delta) > OBJECT_POSITION_MAX_DELTA:
-        if horiz_delta > 0: # left of center
-            horiz_adjust_degrees = -ADJUST_DEGREES_INCREMENT
-        else:               # right of center
-            horiz_adjust_degrees = ADJUST_DEGREES_INCREMENT
-    if abs(vert_delta) > OBJECT_POSITION_MAX_DELTA:
-        if vert_delta > 0:  # above center
-            vert_adjust_degrees = -ADJUST_DEGREES_INCREMENT
-        else:               # below center
-            vert_adjust_degrees = ADJUST_DEGREES_INCREMENT
+    lock_acquired = adjust_lock.acquire(blocking=False)
+    if not lock_acquired:
+        return
+    
+    try:
+        horiz_delta = SCREEN_CENTER[0] - object_of_interest_center[0]
+        vert_delta = SCREEN_CENTER[1] - object_of_interest_center[1]
+        
+        vert_adjust_degrees = 0
+        horiz_adjust_degrees = 0
+        abs_horiz_delta = abs(horiz_delta)
+        adjust_horiz_degrees = int(abs_horiz_delta / ADJUST_DEGREES_PER_PIXEL)
+        if abs_horiz_delta > OBJECT_POSITION_MAX_DELTA:
+            if horiz_delta > 0: # left of center
+                horiz_adjust_degrees = -adjust_horiz_degrees
+            else:               # right of center
+                horiz_adjust_degrees = adjust_horiz_degrees
+        abs_vert_delta = abs(vert_delta)
+        adjust_vert_degrees = int(abs_vert_delta / ADJUST_DEGREES_PER_PIXEL)
+        if abs_vert_delta > OBJECT_POSITION_MAX_DELTA:
+            if vert_delta > 0:  # above center
+                vert_adjust_degrees = -adjust_vert_degrees
+            else:               # below center
+                vert_adjust_degrees = adjust_vert_degrees
 
-    print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
-    if vert_adjust_degrees != 0:
-        pan_tilt.adjust_tilt(vert_adjust_degrees)
-    if horiz_adjust_degrees != 0:
-        pan_tilt.adjust_pan(horiz_adjust_degrees)
+        print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
+        if vert_adjust_degrees != 0:
+            pan_tilt.adjust_tilt(vert_adjust_degrees)
+        if horiz_adjust_degrees != 0:
+            pan_tilt.adjust_pan(horiz_adjust_degrees)
+    finally:
+        adjust_lock.release()
 
 # trackbars
 cv.namedWindow('trackbars')
