@@ -62,7 +62,7 @@ def adjust_camera_position(object_of_interest_center):
         adjust_lock.release()
     time.sleep(.1)
 
-def calculate_area(rec):
+def calculate_area(rect):
     x,y,w,h = rect
     return w * h
 
