@@ -80,27 +80,30 @@ try:
             1.3, # scale factor
             5,   # min neighbors
         )
-        eyes=eye_cascade.detectMultiScale(
-            frame_gray, 
-            1.3, # scale factor
-            5,   # min neighbors
-        )
-
-        if len(eyes) > 0:
-            for eye in eyes:
-                x,y,w,h = eye
-                cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 255), 3)
-
+        
         if len(faces) > 0:
             print(faces)
             faces_by_area = sorted(faces, key=lambda face: calculate_area(face), reverse=True)
             largest_face = faces_by_area[0]
-            x,y,w,h = largest_face
+            x_f,y_f,w_f,h_f = largest_face
             if calculate_area(largest_face) >= OBJECT_OF_INTEREST_MIN_AREA:
-                cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 3)
-                face_center = (x + int(w/2), y + int(h/2))
+                region_of_interest = frame_gray[y_f:y_f+h_f,x_f:x_f+w_f]
+                region_of_interest_color = frame[y_f:y_f+h_f,x_f:x_f+w_f]
+                cv.rectangle(frame, (x_f, y_f), (x_f+w_f, y_f+h_f), (255, 0, 0), 3)
+
+                eyes=eye_cascade.detectMultiScale(
+                    region_of_interest, 
+                    1.3, # scale factor
+                    5,   # min neighbors
+                )
+                if len(eyes) > 0:
+                    for eye in eyes:
+                        x,y,w,h = eye
+                        cv.rectangle(region_of_interest_color, (x, y), (x+w, y+h), (255, 0, 255), 3)
+
+                face_center = (x_f + int(w_f/2), y_f + int(h_f/2))
                 adjust_camera_position_async(face_center)
-        
+
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.imshow("piCam",frame)
         if cv.waitKey(1) == ord('q'):
