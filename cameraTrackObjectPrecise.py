@@ -18,7 +18,7 @@ SCREEN_HEIGHT = 468
 SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
 OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
-ADJUST_DEGREES_INCREMENT = 1
+ADJUST_DEGREES_INCREMENT = 5
 
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -81,9 +81,9 @@ def adjust_camera_position(object_of_interest_center):
             horiz_adjust_degrees = ADJUST_DEGREES_INCREMENT
     if abs(vert_delta) > OBJECT_POSITION_MAX_DELTA:
         if vert_delta > 0:  # above center
-            vert_adjust_degrees = -ADJUST_DEGREES_INCREMENT
-        else:               # below center
             vert_adjust_degrees = ADJUST_DEGREES_INCREMENT
+        else:               # below center
+            vert_adjust_degrees = -ADJUST_DEGREES_INCREMENT
 
     print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
     if vert_adjust_degrees != 0:
