@@ -17,9 +17,7 @@ SCREEN_WIDTH = 864
 SCREEN_HEIGHT = 468
 SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
-OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
-ADJUST_PIXELS_PER_DEGREE = 40
-ADJUST_INTERVAL_SECONDS = .25
+ADJUST_PIXELS_PER_DEGREE = 50
 MODE_TRACK = 0
 MODE_TRAIN = 1
 
@@ -85,18 +83,12 @@ def adjust_camera_position(object_of_interest_center):
     try:
         horiz_delta = SCREEN_CENTER[0] - object_of_interest_center[0]
         vert_delta = SCREEN_CENTER[1] - object_of_interest_center[1]
-        
-        vert_adjust_degrees = 0
-        horiz_adjust_degrees = 0
-        if abs(horiz_delta) > OBJECT_POSITION_MAX_DELTA:
-            horiz_adjust_degrees -= horiz_delta / ADJUST_PIXELS_PER_DEGREE
-        if abs(vert_delta) > OBJECT_POSITION_MAX_DELTA:
-            vert_adjust_degrees -= vert_delta / ADJUST_PIXELS_PER_DEGREE
-
+        vert_adjust_degrees = -(vert_delta / ADJUST_PIXELS_PER_DEGREE)
+        horiz_adjust_degrees = -(horiz_delta / ADJUST_PIXELS_PER_DEGREE)
         print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
-        if vert_adjust_degrees != 0:
+        if vert_adjust_degrees >= 1:
             pan_tilt.adjust_tilt(vert_adjust_degrees)
-        if horiz_adjust_degrees != 0:
+        if horiz_adjust_degrees >= 1:
             pan_tilt.adjust_pan(horiz_adjust_degrees)
     finally:
         adjust_lock.release()
@@ -112,7 +104,6 @@ cv.createTrackbar('Val high', 'trackbars', val_high, 255, set_val_high)
 cv.createTrackbar('Train Mode?', 'trackbars', program_mode, 1, set_program_mode)
 
 try:
-    last_camera_adjust_time = time.time()
     last_program_mode = program_mode
     while True:
         tStart=time.time()
@@ -142,10 +133,7 @@ try:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 # print(f"object of interest area: {object_of_interest_area}")
                 if program_mode == MODE_TRACK:
-                    now = time.time()
-                    if now - last_camera_adjust_time > ADJUST_INTERVAL_SECONDS: # wait X seconds between camera adjustments - TODO: constant
-                        last_camera_adjust_time = now
-                        adjust_camera_position_async(object_of_interest_center)
+                    adjust_camera_position_async(object_of_interest_center)
                 if program_mode == MODE_TRAIN and last_program_mode == MODE_TRACK: # center camera after transition to train mode
                     pan_tilt.set_pan(90)
                     pan_tilt.set_tilt(90)
