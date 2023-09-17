@@ -46,7 +46,6 @@ class PanTilt:
         else:
             self._gradually_change_degrees(pin, degrees)
         self.degrees_by_pin.update(dict([(pin, degrees)]))
-        print(self.degrees_by_pin)
 
     def _gradually_change_degrees(self, pin, degrees):
         increments = 100
