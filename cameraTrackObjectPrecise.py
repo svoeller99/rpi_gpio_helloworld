@@ -81,9 +81,9 @@ def adjust_camera_position(object_of_interest_center):
             horiz_adjust_degrees = ADJUST_DEGREES_INCREMENT
     if abs(vert_delta) > OBJECT_POSITION_MAX_DELTA:
         if vert_delta > 0:  # above center
-            vert_adjust_degrees = ADJUST_DEGREES_INCREMENT
-        else:               # below center
             vert_adjust_degrees = -ADJUST_DEGREES_INCREMENT
+        else:               # below center
+            vert_adjust_degrees = ADJUST_DEGREES_INCREMENT
 
     print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
     if vert_adjust_degrees != 0:
