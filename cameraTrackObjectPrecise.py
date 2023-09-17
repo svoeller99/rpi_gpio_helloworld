@@ -18,7 +18,8 @@ SCREEN_HEIGHT = 468
 SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
 OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
-ADJUST_DEGREES_INCREMENT = 5
+ADJUST_DEGREES_INCREMENT = 1
+ADJUST_INTEVAL_SECONDS = .25
 
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -130,7 +131,7 @@ try:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 # print(f"object of interest area: {object_of_interest_area}")
                 now = time.time()
-                if now - last_camera_adjust_time > 1: # wait 1 seconds between camera adjustments - TODO: constant
+                if now - last_camera_adjust_time > ADJUST_INTERVAL_SECONDS: # wait X seconds between camera adjustments - TODO: constant
                     last_camera_adjust_time = now
                     adjust_camera_position_async(object_of_interest_center)
         
