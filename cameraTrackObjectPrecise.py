@@ -20,6 +20,8 @@ OBJECT_OF_INTEREST_MIN_AREA = 5000
 OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
 ADJUST_DEGREES_INCREMENT = 1
 ADJUST_INTERVAL_SECONDS = .25
+MODE_TRACK = 0
+MODE_TRAIN = 1
 
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -32,6 +34,7 @@ piCam.start()
 
 # state
 fps=30
+program_mode = MODE_TRAIN
 # look for yellow bottlecap by default
 hue_low = 20
 hue_high = 30
@@ -59,6 +62,9 @@ def set_val_low(val):
 def set_val_high(val):
     global val_high
     val_high = val
+def set_program_mode(val):
+    global program_mode
+    program_mode = val
 
 GPIO.setmode(GPIO.BCM)
 pan_tilt = PanTilt()
@@ -100,9 +106,11 @@ cv.createTrackbar('Sat low', 'trackbars', sat_low, 255, set_sat_low)
 cv.createTrackbar('Sat high', 'trackbars', sat_high, 255, set_sat_high)
 cv.createTrackbar('Val low', 'trackbars', val_low, 255, set_val_low)
 cv.createTrackbar('Val high', 'trackbars', val_high, 255, set_val_high)
+cv.createTrackbar('Train Mode?', 'trackbars', program_mode, 1, set_program_mode)
 
 try:
     last_camera_adjust_time = time.time()
+    last_program_mode = program_mode
     while True:
         tStart=time.time()
 
@@ -130,10 +138,15 @@ try:
             if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
                 cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
                 # print(f"object of interest area: {object_of_interest_area}")
-                now = time.time()
-                if now - last_camera_adjust_time > ADJUST_INTERVAL_SECONDS: # wait X seconds between camera adjustments - TODO: constant
-                    last_camera_adjust_time = now
-                    adjust_camera_position_async(object_of_interest_center)
+                if program_mode == MODE_TRACK:
+                    now = time.time()
+                    if now - last_camera_adjust_time > ADJUST_INTERVAL_SECONDS: # wait X seconds between camera adjustments - TODO: constant
+                        last_camera_adjust_time = now
+                        adjust_camera_position_async(object_of_interest_center)
+                if program_mode == MODE_TRAIN and last_program_mode == MODE_TRACK: # center camera after transition to train mode
+                    pan_tilt.set_pan(90)
+                    pan_tilt.set_tilt(90)
+                last_program_mode = program_mode
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.imshow("piCam",frame)
