@@ -19,7 +19,7 @@ SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
 OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
 ADJUST_DEGREES_INCREMENT = 1
-ADJUST_INTEVAL_SECONDS = .25
+ADJUST_INTERVAL_SECONDS = .25
 
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
