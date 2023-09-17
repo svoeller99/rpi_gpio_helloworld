@@ -78,21 +78,24 @@ try:
 
         if len(faces) > 0:
             print(faces)
+            for face in faces:
+                x,y,w,h = face
+                cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 3)
 
         # contours, junk = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         # if len(contours) > 0:
-        #     contours = sorted(contours, key=lambda contour: cv.contourArea(contour), reverse=True)
-        #     cv.drawContours(frame, contours, 0, (255, 0, 0), 2)
-        #     largest_contour = contours[0]
-        #     x,y,w,h = cv.boundingRect(largest_contour)
-        #     object_of_interest_start = (x, y)
-        #     object_of_interest_end = (x + w, y + h)
-        #     object_of_interest_area = w * h
-        #     object_of_interest_center = (x + int(w/2), y + int(h/2))
-        #     if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
-        #         cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
-        #         # print(f"object of interest area: {object_of_interest_area}")
-        #         adjust_camera_position_async(object_of_interest_center)
+            # contours = sorted(contours, key=lambda contour: cv.contourArea(contour), reverse=True)
+            # cv.drawContours(frame, contours, 0, (255, 0, 0), 2)
+            # largest_contour = contours[0]
+            # x,y,w,h = cv.boundingRect(largest_contour)
+            # object_of_interest_start = (x, y)
+            # object_of_interest_end = (x + w, y + h)
+            # object_of_interest_area = w * h
+            # object_of_interest_center = (x + int(w/2), y + int(h/2))
+            # if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
+            #     cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
+            #     # print(f"object of interest area: {object_of_interest_area}")
+            #     adjust_camera_position_async(object_of_interest_center)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.imshow("piCam",frame)
