@@ -68,6 +68,7 @@ def calculate_area(rect):
 
 try:
     face_cascade = cv.CascadeClassifier('./haar/haarcascade_frontalface_default.xml')
+    eye_cascade = cv.CascadeClassifier('./haar/haarcascade_eye.xml')
 
     while True:
         tStart=time.time()
@@ -79,6 +80,16 @@ try:
             1.3, # scale factor
             5,   # min neighbors
         )
+        eyes=eye_cascade.detectMultiScale(
+            frame_gray, 
+            1.3, # scale factor
+            5,   # min neighbors
+        )
+
+        if len(eyes) > 0:
+            for eye in eyes:
+                x,y,w,h = eye
+                cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 255), 3)
 
         if len(faces) > 0:
             print(faces)
