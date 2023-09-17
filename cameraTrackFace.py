@@ -62,6 +62,10 @@ def adjust_camera_position(object_of_interest_center):
         adjust_lock.release()
     time.sleep(.1)
 
+def calculate_area(rec):
+    x,y,w,h = rect
+    return w * h
+
 try:
     face_cascade = cv.CascadeClassifier('./haar/haarcascade_frontalface_default.xml')
 
@@ -78,29 +82,16 @@ try:
 
         if len(faces) > 0:
             print(faces)
-            for face in faces:
-                x,y,w,h = face
+            faces_by_area = sorted(faces, key=lambda face: calculate_area(face), reverse=True)
+            largest_face = faces_by_area[0]
+            x,y,w,h = largest_face
+            if calculate_area(largest_face) >= OBJECT_OF_INTEREST_MIN_AREA:
                 cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 3)
-
-        # contours, junk = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-        # if len(contours) > 0:
-            # contours = sorted(contours, key=lambda contour: cv.contourArea(contour), reverse=True)
-            # cv.drawContours(frame, contours, 0, (255, 0, 0), 2)
-            # largest_contour = contours[0]
-            # x,y,w,h = cv.boundingRect(largest_contour)
-            # object_of_interest_start = (x, y)
-            # object_of_interest_end = (x + w, y + h)
-            # object_of_interest_area = w * h
-            # object_of_interest_center = (x + int(w/2), y + int(h/2))
-            # if object_of_interest_area >= OBJECT_OF_INTEREST_MIN_AREA:
-            #     cv.rectangle(frame, object_of_interest_start, object_of_interest_end, (0, 0, 255), 3)
-            #     # print(f"object of interest area: {object_of_interest_area}")
-            #     adjust_camera_position_async(object_of_interest_center)
+                face_center = (x + int(w/2), y + int(h/2))
+                adjust_camera_position_async(face_center)
         
         cv.putText(frame, f"{fps:.1f}", FPS_POSITION, FPS_FONT, FPS_FONT_SCALE, FPS_FONT_COLOR, FPS_THICKNESS)
         cv.imshow("piCam",frame)
-        # cv.imshow('mask', mask_small)
-        # cv.imshow('Object of interest', object_of_interest)
         if cv.waitKey(1) == ord('q'):
             break
         tEnd=time.time()
