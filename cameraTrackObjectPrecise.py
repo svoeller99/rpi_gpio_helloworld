@@ -86,9 +86,9 @@ def adjust_camera_position(object_of_interest_center):
         vert_adjust_degrees = -(vert_delta / ADJUST_PIXELS_PER_DEGREE)
         horiz_adjust_degrees = -(horiz_delta / ADJUST_PIXELS_PER_DEGREE)
         print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
-        if abs(vert_adjust_degrees) >= .1:
+        if abs(vert_adjust_degrees) >= 1:
             pan_tilt.adjust_tilt(vert_adjust_degrees)
-        if abs(horiz_adjust_degrees) >= .1:
+        if abs(horiz_adjust_degrees) >= 1:
             pan_tilt.adjust_pan(horiz_adjust_degrees)
     finally:
         adjust_lock.release()
