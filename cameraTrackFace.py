@@ -35,7 +35,7 @@ GPIO.setmode(GPIO.BCM)
 adjust_lock = Lock()
 pan_tilt = PanTilt()
 pan_tilt.start()
-pan_tilt.set_tilt(30) # point upwards a bit to start
+pan_tilt.set_tilt(60) # point upwards a bit to start
 
 def adjust_camera_position_async(object_of_interest_center):
     print('running async camera adjust')
@@ -76,7 +76,8 @@ try:
             5,   # min neighbors
         )
 
-        print(faces)
+        if len(faces) > 0:
+            print(faces)
 
         # contours, junk = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         # if len(contours) > 0:
