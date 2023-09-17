@@ -72,8 +72,6 @@ def adjust_camera_position_async(object_of_interest_start, object_of_interest_en
 
 def adjust_camera_position(object_of_interest_start, object_of_interest_end):
     global CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, pan_tilt
-    # TODO: move this into a worker thread to avoid interrupting video
-    # determine if we need to adjust tilt/pan to bring object of interest into frame    
     above_bounding_rectangle = object_of_interest_start[1] < CAMERA_FOCUS_RECTANGLE_START[1]
     below_bounding_rectangle = object_of_interest_end[1] > CAMERA_FOCUS_RECTANGLE_END[1]
     left_of_bounding_rectangle = object_of_interest_start[0] < CAMERA_FOCUS_RECTANGLE_START[0]

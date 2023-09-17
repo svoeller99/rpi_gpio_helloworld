@@ -17,6 +17,8 @@ SCREEN_WIDTH = 864
 SCREEN_HEIGHT = 468
 SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
+OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
+ADJUST_DEGREES_INCREMENT = 1
 
 piCam = Picamera2()
 piCam.preview_configuration.main.size = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -67,24 +69,23 @@ def adjust_camera_position_async(object_of_interest_center):
 
 def adjust_camera_position(object_of_interest_center):
     global CAMERA_FOCUS_RECTANGLE_START, CAMERA_FOCUS_RECTANGLE_END, pan_tilt
-    # TODO: move this into a worker thread to avoid interrupting video
-    # determine if we need to adjust tilt/pan to bring object of interest into frame    
-    above_center = object_of_interest_center[1] < SCREEN_CENTER[1]
-    below_center = object_of_interest_center[1] > SCREEN_CENTER[1]
-    left_of_center = object_of_interest_center[0] < SCREEN_CENTER[0]
-    right_of_center = object_of_interest_center[0] > SCREEN_CENTER[0]
-    print(f"above={above_center} below={below_center} left={left_of_center} right={right_of_center}")
-
+    horiz_delta = SCREEN_CENTER[0] - object_of_interest_center[0]
+    vert_delta = SCREEN_CENTER[1] - object_of_interest_center[1]
+    
     vert_adjust_degrees = 0
     horiz_adjust_degrees = 0
-    if above_center and not below_center:
-        vert_adjust_degrees = -1
-    if not above_center and below_center:
-        vert_adjust_degrees = 1
-    if not right_of_center and left_of_center:
-        horiz_adjust_degrees = -1
-    if right_of_center and not left_of_center:
-        horiz_adjust_degrees = 1
+    if abs(horiz_delta) > OBJECT_POSITION_MAX_DELTA:
+        if horiz_delta > 0: # left of center
+            horiz_adjust_degrees = -ADJUST_DEGREES_INCREMENT
+        else:               # right of center
+            horiz_adjust_degrees = ADJUST_DEGREES_INCREMENT
+    if abs(vert_delta) > OBJECT_POSITION_MAX_DELTA:
+        if vert_delta > 0:  # above center
+            vert_adjust_degrees = -ADJUST_DEGREES_INCREMENT
+        else:               # below center
+            vert_adjust_degrees = ADJUST_DEGREES_INCREMENT
+
+    print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
     if vert_adjust_degrees != 0:
         pan_tilt.adjust_tilt(vert_adjust_degrees)
     if horiz_adjust_degrees != 0:
