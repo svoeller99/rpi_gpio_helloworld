@@ -18,7 +18,7 @@ SCREEN_HEIGHT = 468
 SCREEN_CENTER = (int(SCREEN_WIDTH / 2), int(SCREEN_HEIGHT / 2))
 OBJECT_OF_INTEREST_MIN_AREA = 5000
 OBJECT_POSITION_MAX_DELTA = 30 # allow object of interest's center to differ by no more than 30 pixels from screen center
-ADJUST_DEGREES_PER_PIXEL = 40 # TODO: tune this
+ADJUST_PIXELS_PER_DEGREE = 40
 ADJUST_INTERVAL_SECONDS = .25
 MODE_TRACK = 0
 MODE_TRAIN = 1
@@ -88,20 +88,10 @@ def adjust_camera_position(object_of_interest_center):
         
         vert_adjust_degrees = 0
         horiz_adjust_degrees = 0
-        abs_horiz_delta = abs(horiz_delta)
-        adjust_horiz_degrees = int(abs_horiz_delta / ADJUST_DEGREES_PER_PIXEL)
-        if abs_horiz_delta > OBJECT_POSITION_MAX_DELTA:
-            if horiz_delta > 0: # left of center
-                horiz_adjust_degrees = -adjust_horiz_degrees
-            else:               # right of center
-                horiz_adjust_degrees = adjust_horiz_degrees
-        abs_vert_delta = abs(vert_delta)
-        adjust_vert_degrees = int(abs_vert_delta / ADJUST_DEGREES_PER_PIXEL)
-        if abs_vert_delta > OBJECT_POSITION_MAX_DELTA:
-            if vert_delta > 0:  # above center
-                vert_adjust_degrees = -adjust_vert_degrees
-            else:               # below center
-                vert_adjust_degrees = adjust_vert_degrees
+        if abs(horiz_delta) > OBJECT_POSITION_MAX_DELTA:
+            horiz_adjust_degrees -= horiz_delta / ADJUST_PIXELS_PER_DEGREE
+        if abs(vert_delta) > OBJECT_POSITION_MAX_DELTA:
+            vert_adjust_degrees -= vert_delta / ADJUST_PIXELS_PER_DEGREE
 
         print(f"horiz_delta={horiz_delta} vert_delta={vert_delta} horiz_adjust_degrees={horiz_adjust_degrees} vert_adjust_degrees={vert_adjust_degrees}")
         if vert_adjust_degrees != 0:
