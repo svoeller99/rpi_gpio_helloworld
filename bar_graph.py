@@ -10,4 +10,9 @@ for i in ledPins:
     GPIO.setup(i, GPIO.OUT)
     GPIO.output(i, GPIO.LOW)
 
+for i in ledPins:
+    GPIO.output(i, GPIO.HIGH)
+    time.sleep(.5)
+    GPIO.output(i, GPIO.LOW)
+
 GPIO.cleanup()
